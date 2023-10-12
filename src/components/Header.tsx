@@ -48,7 +48,7 @@ const Header = () => {
               <h1 className="text-xl font-bold">Frituur d'Aa</h1>
             </Link>
           </div>
-          <nav className="mx-6 flex items-center space-x-4 sm:hidden md:block lg:space-x-6">
+          <nav className="mx-6 flex hidden items-center space-x-4 md:block lg:space-x-6">
             {routes.map((route, i) => (
               <Button asChild variant="ghost">
                 <Link
@@ -61,8 +61,8 @@ const Header = () => {
               </Button>
             ))}
           </nav>
-          <div className="flex items-center">
-            <Button className="mr-2">Order</Button>
+          <div className="mr-2 flex items-center">
+            <Button className="mr-4">Order</Button>
             <ModeToggle />
             <ProfileButton />
           </div>
