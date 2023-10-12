@@ -1,5 +1,6 @@
 import { api } from "~/utils/api";
 import { Button } from "~/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   //const { data } = api.products.getAll.useQuery();
@@ -15,7 +16,7 @@ export default function Home() {
             <div className="flex h-full w-full flex-col items-center justify-center gap-y-8 text-center">
               <div className=" max-w-xs rounded-lg p-8 font-bold sm:max-w-xl">
                 <Button size="lg" className="w-full p-12 text-3xl">
-                  Order Now
+                  <Link href="/order">Order Now</Link>
                 </Button>
               </div>
             </div>

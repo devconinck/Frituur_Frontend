@@ -18,6 +18,7 @@ model Product {
     createdAt DateTime @default(now())
     description String
     discount Float
+    url String
     
     category  ProductCategory @relation(fields: [categoryId], references: [id])
     categoryId Int
