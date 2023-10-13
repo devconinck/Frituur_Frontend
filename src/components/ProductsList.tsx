@@ -4,6 +4,7 @@ import { Separator } from "./ui/separator";
 
 export default function ProductsList() {
   const { data } = api.products.getAll.useQuery();
+
   const List = () => {
     const ListItems = data?.map((product) => (
       <div>

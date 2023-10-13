@@ -1,4 +1,4 @@
-export default function MyProfile() {
+export default function MyAccount() {
   return (
     <>
       <div>

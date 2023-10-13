@@ -29,6 +29,6 @@
     "**/*.cjs",
     "**/*.mjs",
     "src/server/api/test.js"
-  ],
+, "src/pages/account"  ],
   "exclude": ["node_modules"]
 }

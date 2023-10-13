@@ -35,13 +35,13 @@ export function ProfileButton() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href="/my-orders">
+          <Link href="/account/my-orders">
             <DropdownMenuItem>My Orders</DropdownMenuItem>
           </Link>
-          <Link href="/customer-card">
+          <Link href="/account/customer-card">
             <DropdownMenuItem>My Customer Card</DropdownMenuItem>
           </Link>
-          <Link href="/my-account">
+          <Link href="/account">
             <DropdownMenuItem>My Account</DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
