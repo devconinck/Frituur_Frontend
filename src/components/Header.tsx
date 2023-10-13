@@ -23,6 +23,7 @@ const Header = () => {
 
   return (
     <header className="border-b px-4 py-3 sm:flex sm:justify-between">
+      <link rel="shortcut icon" href="favicon.png" type="image/x-icon" />
       <Container>
         <div className="relative flex h-16 w-full items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center">
@@ -50,7 +51,7 @@ const Header = () => {
           </div>
           <nav className="mx-6 flex items-center space-x-4 md:block lg:space-x-6">
             {routes.map((route, i) => (
-              <Button asChild variant="ghost">
+              <Button key={i} asChild variant="ghost">
                 <Link
                   key={i}
                   href={route.href}
@@ -62,7 +63,9 @@ const Header = () => {
             ))}
           </nav>
           <div className="mr-2 flex items-center">
-            <Button className="mr-4">Order</Button>
+            <Button className="mr-4">
+              <Link href={"/order"}>Order</Link>
+            </Button>
             <ModeToggle />
             <ProfileButton />
           </div>

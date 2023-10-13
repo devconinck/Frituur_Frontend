@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "src/components/ui/avatar";
 import { Button } from "src/components/ui/button";
 import {
@@ -27,16 +28,22 @@ export function ProfileButton() {
             <p className="text-sm font-medium leading-none">
               Quinten Deconinck
             </p>
-            <p className="text-muted-foreground text-xs leading-none">
+            <p className="text-xs leading-none text-muted-foreground">
               quinten0211@gmail.com
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Orders</DropdownMenuItem>
-          <DropdownMenuItem>Customer Card</DropdownMenuItem>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <Link href="/my-orders">
+            <DropdownMenuItem>My Orders</DropdownMenuItem>
+          </Link>
+          <Link href="/customer-card">
+            <DropdownMenuItem>My Customer Card</DropdownMenuItem>
+          </Link>
+          <Link href="/my-account">
+            <DropdownMenuItem>My Account</DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>Log out</DropdownMenuItem>
