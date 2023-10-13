@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "src/components/ui/sheet";
 import { Menu, Moon, ShoppingCart, Sun } from "lucide-react";
 import { ProfileButton } from "./ui/profile-button";
-import { ModeToggle } from "./ModeToggle";
+import ModeToggle from "./ModeToggle";
 //import ProfileButton from "./ui/ProfileButton";
 
 const Header = () => {
@@ -63,9 +63,9 @@ const Header = () => {
             ))}
           </nav>
           <div className="mr-2 flex items-center">
-            <Button className="mr-4">
-              <Link href={"/order"}>Order</Link>
-            </Button>
+            <Link href={"/order"}>
+              <Button className="mr-4">Order</Button>
+            </Link>
             <ModeToggle />
             <ProfileButton />
           </div>

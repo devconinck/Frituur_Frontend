@@ -12,23 +12,22 @@ generator client {
 }
 
 model Product {
-    id        Int      @id @default(autoincrement())
+    id        String      @id @default(cuid())
     name      String
-    price     Float
+    price     Decimal
     createdAt DateTime @default(now())
-    description String
-    discount Float
-    url String
-    
-    category  ProductCategory @relation(fields: [categoryId], references: [id])
-    categoryId Int
+    category  Category    @relation(fields: [categoryId], references: [id])
+    categoryId String
+    url       String
 
     @@index([id])
 }
 
-model ProductCategory {
-    id        Int      @id @default(autoincrement())
-    categoryName      String
-    createdAt DateTime @default(now())
-    products  Product[]
+model Category {
+  id String @id @default(cuid())
+  name String
+  createdAt DateTime @default(now())
+  products Product[]
+
+  @@index([id])
 }

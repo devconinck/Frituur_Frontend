@@ -1,21 +1,28 @@
-import { Divide } from "lucide-react";
+import { api } from "~/utils/api";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "src/components/ui/tabs";
+import { Category } from "@prisma/client";
 
-export default function CategoryList({}) {
+export default function CategoryList() {
+  const { data } = api.categories.getAll.useQuery();
+
   return (
-    <Tabs defaultValue="account" className="w-[400px]">
-      <TabsList className="grid w-full grid-cols-2">
-        {data?.map((product: Product) => (
-          <TabsTrigger key={product.id} value={product.name}>
-            {product.name}
-          </TabsTrigger>
-        ))}
-      </TabsList>
-    </Tabs>
+    <>
+      <div>
+        <Tabs defaultValue="account" className="w-full">
+          <TabsList className="grid w-full grid-cols-12">
+            {data?.map((category) => (
+              <TabsTrigger key={category.id} value={category.id}>
+                {category.name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+    </>
   );
 }
