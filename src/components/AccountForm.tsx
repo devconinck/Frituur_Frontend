@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { CalendarIcon, CheckIcon } from "lucide-react";
 import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -15,7 +15,7 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/registry/new-york/ui/command";
+} from "./ui/command";
 import {
   Form,
   FormControl,
@@ -24,14 +24,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/registry/new-york/ui/form";
-import { Input } from "@/registry/new-york/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/registry/new-york/ui/popover";
-import { toast } from "@/registry/new-york/ui/use-toast";
+} from "./ui/form";
+import { Input } from "./ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { toast } from "./ui/use-toast";
 
 const languages = [
   { label: "English", value: "en" },

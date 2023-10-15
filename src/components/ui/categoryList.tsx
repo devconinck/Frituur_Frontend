@@ -13,10 +13,14 @@ export default function CategoryList() {
 
   return (
     <>
-      <ScrollArea className="mx-7">
-        <div className="">
+      <ScrollArea className="m-7 pb-7">
+        <div className="flex overflow-x-hidden">
           {data?.map((category) => (
-            <Button variant={"ghost"} key={category.id} className=" ">
+            <Button
+              variant={"ghost"}
+              key={category.id}
+              className="whitespace-nowrap "
+            >
               {category.name}
             </Button>
           ))}
