@@ -5,25 +5,25 @@ import {
   TabsList,
   TabsTrigger,
 } from "src/components/ui/tabs";
+import { ScrollArea, ScrollBar } from "./scroll-area";
+import { Button } from "./button";
 
 export default function CategoryList() {
   const { data } = api.categories.getAll.useQuery();
 
   return (
     <>
-      <div className="md:max-w-lg ">
-        <ScrollArea>
-          <Tabs defaultValue="Drinks" className="w-[500px]">
-            <TabsList className="grid w-full grid-cols-12 ">
-              {data?.map((category) => (
-                <TabsTrigger key={category.id} value={category.id}>
-                  {category.name}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        </ScrollArea>
-      </div>
+      <ScrollArea className="mx-7">
+        <div className="">
+          {data?.map((category) => (
+            <Button variant={"ghost"} key={category.id} className=" ">
+              {category.name}
+            </Button>
+          ))}
+
+          <ScrollBar orientation="horizontal" />
+        </div>
+      </ScrollArea>
     </>
   );
 }

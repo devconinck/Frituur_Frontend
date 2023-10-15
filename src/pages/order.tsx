@@ -1,6 +1,6 @@
+import { NextPage } from "next";
 import ProductsList from "~/components/ProductsList";
-
-export default function Order() {
+const Order: NextPage = () => {
   return (
     <>
       <div className="flex items-center justify-center pt-8 text-4xl font-bold">
@@ -9,4 +9,6 @@ export default function Order() {
       <ProductsList />
     </>
   );
-}
+};
+
+export default Order;

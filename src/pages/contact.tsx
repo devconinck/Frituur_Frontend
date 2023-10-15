@@ -1,4 +1,6 @@
-export default function Contact() {
+import { NextPage } from "next";
+
+const Contact: NextPage = () => {
   return (
     <>
       <div className="flex items-center justify-center pt-24 text-5xl">
@@ -15,4 +17,6 @@ export default function Contact() {
       </div>
     </>
   );
-}
+};
+
+export default Contact;

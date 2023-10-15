@@ -1,4 +1,6 @@
-export default function MyAccount() {
+import { NextPage } from "next";
+
+const MyAccount: NextPage = () => {
   return (
     <>
       <div>
@@ -9,4 +11,6 @@ export default function MyAccount() {
       </div>
     </>
   );
-}
+};
+
+export default MyAccount;
