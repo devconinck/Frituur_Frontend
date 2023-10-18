@@ -1,6 +1,7 @@
 import { Button } from "~/components/ui/button";
 import Link from "next/link";
 import { NextPage } from "next";
+import { useEffect, useState } from "react";
 
 const Home: NextPage = () => {
   return (
