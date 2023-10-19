@@ -33,7 +33,7 @@ export default function ProductsList() {
                     <div className="flex justify-between rounded-lg border p-4">
                       <div className="mb-2 flex justify-between">
                         <img
-                          src={product.url}
+                          src={`/productImages/${product.url}`}
                           alt={product.name}
                           className="h-20 w-20 rounded-lg object-cover"
                         />
