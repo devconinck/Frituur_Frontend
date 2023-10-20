@@ -3,6 +3,8 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useEffect, useState } from "react";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
+import useSWR from "swr";
+import { getAll } from "~/pages/api";
 
 type Product = {
   id: number;
@@ -11,19 +13,13 @@ type Product = {
   url: string;
 };
 
-export default function ProductsList() {
-  const [products, setProducts] = useState([]);
+export default function ProductsListAdmin() {
+  const { data: products = [], isLoading, error } = useSWR("products", getAll);
 
-  useEffect(() => {
-    fetch("http://localhost:8080/products")
-      .then((res) => res.json())
-      .then((data) => setProducts(data))
-      .catch((err) => console.error(err));
-  }, []);
   return (
     <>
       <div className="flex flex-row">
-        <div className=" h-full w-2/3">
+        <div className=" h-full w-full">
           <CategoryList />
           <div>
             <ScrollArea className="h-96 w-full ">
@@ -50,7 +46,7 @@ export default function ProductsList() {
                             className="shrink-1 w-16 rounded text-center"
                             placeholder="Qty"
                           ></Input>
-                          <Button className="">Add to Cart</Button>
+                          <Button className="text-bold">edit product</Button>
                         </div>
                       </div>
                     </div>
@@ -59,11 +55,6 @@ export default function ProductsList() {
               </div>
             </ScrollArea>
           </div>
-        </div>
-        <div className="flex w-full">
-          <h1 className="flex w-full items-center justify-center text-4xl">
-            CART
-          </h1>
         </div>
       </div>
     </>
