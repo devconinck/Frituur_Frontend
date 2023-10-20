@@ -1,13 +1,16 @@
 import { NextPage } from "next";
+import AdminLayout from "./layout";
 
 const Admin: NextPage = () => {
   return (
     <>
-      <div>
-        <div className="flex items-center justify-center text-4xl ">
-          <p>Admin page</p>
+      <AdminLayout>
+        <div>
+          <div className="flex items-center justify-center text-4xl ">
+            <p>Admin page</p>
+          </div>
         </div>
-      </div>
+      </AdminLayout>
     </>
   );
 };

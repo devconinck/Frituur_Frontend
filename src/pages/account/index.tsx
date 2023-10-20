@@ -1,20 +1,23 @@
-import { NextPage } from "next";
 import { AccountForm } from "~/components/AccountForm";
+import { Separator } from "~/components/ui/separator";
+import SettingsLayout from "./layout";
 
-const MyAccount: NextPage = () => {
+export default function MyAccount() {
   return (
     <>
-      <div>
-        <div className="flex items-center justify-center text-4xl ">
-          Profile information
-          <p>Name, email address, phone number, language preference</p>
-        </div>
-        <div>
+      <SettingsLayout>
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-medium">Account</h3>
+            <p className="text-sm text-muted-foreground">
+              Change account settings
+            </p>
+          </div>
+
+          <Separator />
           <AccountForm />
         </div>
-      </div>
+      </SettingsLayout>
     </>
   );
-};
-
-export default MyAccount;
+}
