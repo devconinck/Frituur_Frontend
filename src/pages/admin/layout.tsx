@@ -1,5 +1,6 @@
 import { Separator } from "src/components/ui/separator";
 import { SidebarNav } from "src/components/ui/sidebar-nav";
+import { Product } from "~/types";
 
 const sidebarNavItems = [
   {
@@ -35,7 +36,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <aside className="-mx-4 lg:w-1/5">
             <SidebarNav items={sidebarNavItems} />
           </aside>
-          <div className="flex-1 lg:max-w-2xl">{children}</div>
+          <div className="flex-1">{children}</div>
         </div>
       </div>
     </>

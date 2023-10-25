@@ -2,10 +2,18 @@ import axios from "axios";
 
 const baseUrl = `http://localhost:8080`;
 
-export async function getAll(url: string) {
-  const { data } = await axios.get(`${baseUrl}/${url}`);
+export const fetcher = async (url: string) =>
+  await axios.get(`${baseUrl}/${url}`).then((res) => res.data);
 
-  return data.items;
+export async function getAll(url: string) {
+  try {
+    const { data } = await axios.get(`${baseUrl}/${url}`);
+    console.log(data);
+    return data.items;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
 
 export async function getOne(url: string, id: string) {

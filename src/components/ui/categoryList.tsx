@@ -1,26 +1,20 @@
 import { ScrollArea, ScrollBar } from "./scroll-area";
 import { Button } from "./button";
-import { useEffect, useState } from "react";
-
+import useSWR from "swr";
+import { fetcher } from "~/pages/api";
 type Category = {
   id: number;
   name: string;
 };
 
 export default function CategoryList() {
-  const [categories, setCategories] = useState([]);
+  const { data: categories = [] } = useSWR("categories", fetcher);
 
-  useEffect(() => {
-    fetch("http://localhost:8080/categories")
-      .then((res) => res.json())
-      .then((data) => setCategories(data))
-      .catch((err) => console.error(err));
-  }, []);
   return (
     <>
       <ScrollArea className="m-7 pb-7">
         <div className="flex overflow-x-hidden">
-          {categories?.map((category: Category) => (
+          {categories.map((category: Category) => (
             <Button
               variant={"ghost"}
               key={category.id}
