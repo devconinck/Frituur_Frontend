@@ -38,6 +38,14 @@ export default function Products() {
     console.log("add product");
   }
 
+  function handleDelete(id: number) {
+    console.log("delete product");
+  }
+
+  function handleEdit(id: number) {
+    console.log("edit product");
+  }
+
   useEffect(() => {
     setFilteredProducts(products);
   }, [products]);
@@ -55,7 +63,11 @@ export default function Products() {
           onAddProduct={handleAddProduct}
         />
         <Separator />
-        <ProductsListAdmin products={filteredProducts} />
+        <ProductsListAdmin
+          products={filteredProducts}
+          onDelete={handleDelete}
+          onEdit={handleEdit}
+        />
       </div>
     </AdminLayout>
   );
