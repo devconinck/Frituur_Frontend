@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { memo, useCallback } from "react";
 import { on } from "events";
 import { Trash2, Edit3 } from "lucide-react";
+import { DeleteButton } from "./DeleteButton";
 
 type AdminProductProps = {
   product: Product;
@@ -39,7 +40,7 @@ export default memo(function AdminProduct({
         <div className="flex items-center justify-between pr-3">
           <div>
             <Edit3 onClick={handleEdit}>Edit Product</Edit3>
-            <Trash2 onClick={handleDelete}>Delete Product</Trash2>
+            <Trash2 onClick={handleDelete}> Delete Product</Trash2>
           </div>
         </div>
       </div>

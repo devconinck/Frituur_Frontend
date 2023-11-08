@@ -1,11 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import React, { useEffect, useCallback } from "react";
+import { useForm, FormProvider, useFormContext } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
-import { getAll, save } from "~/pages/api";
-import { Category, Product } from "~/types";
-import Error from "src/components/Error";
-import { Button } from "~/components/ui/button";
+import { Category } from "~/types";
+import Error from "~/components/Error";
+import { Button } from "src/components/ui/button";
+import { useGetAllCategories } from "~/hooks/categories";
+import { useUpdateProduct } from "~/hooks/products";
+import { useMutation } from "@tanstack/react-query";
 
 const validationRules = {
   name: {
@@ -18,7 +19,7 @@ const validationRules = {
     min: { value: 0, message: "Price must be positive" },
     max: {
       value: 100,
-      message: "I think you made a type error, price should be less than 100",
+      message: "Price should be less than 100",
     },
   },
   category: { required: "A category is required" },
@@ -27,7 +28,6 @@ const validationRules = {
 
 function LabelInput({ label, name, type, validationRules, ...rest }) {
   const { register, errors, isSubmitting } = useFormContext();
-
   const hasErrors = name in errors;
 
   return (
@@ -46,9 +46,9 @@ function LabelInput({ label, name, type, validationRules, ...rest }) {
   );
 }
 
+// Custom select component for categories
 function CategoriesSelect({ name, categories }) {
   const { register, errors } = useFormContext();
-
   const hasErrors = name in errors;
 
   return (
@@ -69,17 +69,8 @@ function CategoriesSelect({ name, categories }) {
   );
 }
 
-const useGetAll = (url: string) => {
-  return useQuery({
-    queryKey: ["categories"],
-    queryFn: async () => {
-      const data = await getAll(url);
-      return data;
-    },
-  });
-};
-
-export default function AddOrEdit({ currentProduct, setProductToUpdate }) {
+export default function AddOrEdit({ currentProduct, onSave }) {
+  const product = currentProduct || {};
   const {
     register,
     handleSubmit,
@@ -89,19 +80,22 @@ export default function AddOrEdit({ currentProduct, setProductToUpdate }) {
     isSubmitting,
   } = useForm();
 
-  const { trigger: saveProduct, error: saveError } = useSWRMutation(
-    "products",
-    save,
-  );
+  const saveProduct = useMutation({
+    mutationFn: onSave,
+  });
 
-  const onSubmit = useCallback(
+  const onSubmit = (data) => {
+    handleSave(data);
+  };
+
+  const handleSave = useCallback(
     async (data) => {
       const { name, description, price, category } = data;
       await saveProduct({
-        name: name,
-        description: description,
-        price: price,
-        category: category,
+        name,
+        description,
+        price,
+        category,
       });
       reset();
     },
@@ -109,7 +103,7 @@ export default function AddOrEdit({ currentProduct, setProductToUpdate }) {
   );
 
   useEffect(() => {
-    if (product) {
+    if (product.id) {
       setValue("name", product.name);
       setValue("description", product.description);
       setValue("price", product.price);
@@ -119,11 +113,10 @@ export default function AddOrEdit({ currentProduct, setProductToUpdate }) {
     }
   }, [product, reset, setValue]);
 
-  const { data: categories = [] } = useGetAll("categories");
+  const { data: categories = [] } = useGetAllCategories();
 
   return (
     <>
-      <Error error={saveError} />
       <FormProvider
         handleSubmit={handleSubmit}
         errors={errors}
@@ -134,7 +127,7 @@ export default function AddOrEdit({ currentProduct, setProductToUpdate }) {
             <LabelInput
               label="Product name"
               name="name"
-              type="name"
+              type="text"
               validationRules={validationRules.name}
             />
           </div>
@@ -143,7 +136,7 @@ export default function AddOrEdit({ currentProduct, setProductToUpdate }) {
             <LabelInput
               label="Description"
               name="description"
-              type="description"
+              type="text"
               validationRules={validationRules.description}
             />
           </div>
@@ -152,7 +145,7 @@ export default function AddOrEdit({ currentProduct, setProductToUpdate }) {
             <LabelInput
               label="Price"
               name="price"
-              type="price"
+              type="number"
               validationRules={validationRules.price}
             />
           </div>
@@ -163,7 +156,7 @@ export default function AddOrEdit({ currentProduct, setProductToUpdate }) {
 
           <div className="">
             <div className="">
-              <Button type="submit" className="">
+              <Button type="submit" onClick={handleSave} className="">
                 {product.id ? "Save Product" : "Add Product"}
               </Button>
             </div>

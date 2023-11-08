@@ -1,74 +1,39 @@
-import { Separator } from "~/components/ui/separator";
-import AdminLayout from "../layout";
-import FilterOrAdd from "./filterOrAdd";
-import ProductsListAdmin from "~/pages/admin/products/ProductsListAdmin";
-import { useEffect, useState } from "react";
-import { fetcher } from "~/pages/api";
-import useSWR from "swr";
-import { set } from "date-fns";
+import React, { useState, useEffect } from "react";
+import ProductsListAdmin from "./ProductsListAdmin";
+import AddOrEdit from "./AddOrEdit";
+import { useGetAllProducts } from "~/hooks/products";
 import { Product } from "~/types";
+import { updateProduct } from "~/pages/api/products";
 
-export default function Products() {
-  const { data: products = [] } = useSWR<Product[]>("products", fetcher);
+export default function AdminProducts() {
+  const { data: products = [], isLoading, error } = useGetAllProducts();
+  const [currentProduct, setCurrentProduct] = useState({});
 
-  const [filterOptions, setFilterOptions] = useState({});
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  const handleEdit = (product: Product) => {
+    setCurrentProduct(product);
+  };
 
-  function handleFilter(filterOptions: {
-    name?: string;
-    price?: string;
-    category?: string;
-  }) {
-    const filtered = products.filter((product) => {
-      const { name, price, category } = filterOptions;
-      const nameMatch =
-        !name || product.name.toLowerCase().includes(name.toLowerCase());
-      const priceMatch =
-        !price || (product.price && product.price === Number(price));
-      const categoryMatch =
-        !category || product.categoryId === Number(category);
-      return nameMatch && priceMatch && categoryMatch;
-    });
+  const handleDelete = (id: number) => {
+    // Implement deleting a product
+  };
 
-    setFilterOptions(filterOptions);
-    setFilteredProducts(filtered);
-  }
+  const handleAddProduct = () => {
+    setCurrentProduct({});
+  };
 
-  function handleAddProduct() {
-    console.log("add product");
-  }
-
-  function handleDelete(id: number) {
-    console.log("delete product");
-  }
-
-  function handleEdit(id: number) {
-    console.log("edit product");
-  }
-
-  useEffect(() => {
-    setFilteredProducts(products);
-  }, [products]);
+  const handleSaveProduct = (product: Product) => {
+    updateProduct(product.id, product);
+  };
 
   return (
-    <AdminLayout>
-      <div className=" space-y-6">
-        <div>
-          <h3 className="text-lg font-medium">Admin Products</h3>
-        </div>
-        <Separator />
-        <FilterOrAdd
-          onFilter={handleFilter}
-          filterOptions={filterOptions}
-          onAddProduct={handleAddProduct}
-        />
-        <Separator />
-        <ProductsListAdmin
-          products={filteredProducts}
-          onDelete={handleDelete}
-          onEdit={handleEdit}
-        />
-      </div>
-    </AdminLayout>
+    <div>
+      <h1>Admin Products</h1>
+      <AddOrEdit product={currentProduct} onSave={handleSaveProduct} />
+      <ProductsListAdmin
+        products={products}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
+    </div>
   );
 }

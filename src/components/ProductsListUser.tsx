@@ -1,69 +1,64 @@
-import CategoryList from "./ui/categoryList";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import React from "react";
+import { Category, Product } from "~/types";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
-import useSWR from "swr";
-import { fetcher } from "~/pages/api";
-import AsyncData from "./AsyncData";
 
-type Product = {
-  id: number;
-  name: string;
-  price: number;
-  url: string;
+interface ProductListProps {
+  products: Product[];
+  selectedCategory: Category | null;
+  addToCart: (product: Product) => void;
+}
+
+const ProductList: React.FC<ProductListProps> = ({
+  products,
+  selectedCategory,
+  addToCart,
+}) => {
+  return (
+    <div className="">
+      <h2 className="mb-2 text-xl font-semibold">
+        {selectedCategory
+          ? `Products in ${selectedCategory.name}`
+          : "All Products"}
+      </h2>
+      <ScrollArea className="h-96 max-h-[500px] rounded-lg border p-2">
+        <ul>
+          {products
+            .filter(
+              (product) =>
+                !selectedCategory || product.categoryId === selectedCategory.id,
+            )
+            .map((product) => (
+              <li key={product.id} className="mb-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex space-x-4">
+                    <img
+                      src={`/productImages/${product.url}`}
+                      alt={product.name}
+                      className="h-16 w-16 rounded-lg"
+                    />
+                    <div>
+                      <span className="font-semibold">{product.name}</span>
+                      <span className="block text-sm text-gray-500">
+                        ${product.price}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <button
+                      className="rounded bg-blue-500 p-1 text-white"
+                      onClick={() => addToCart(product)}
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              </li>
+            ))}
+        </ul>
+        <ScrollBar orientation="vertical" />
+      </ScrollArea>
+    </div>
+  );
 };
 
-export default function ProductsListUser() {
-  const { data: products = [], isLoading, error } = useSWR("products", fetcher);
-
-  return (
-    <>
-      <div className="flex flex-row">
-        <div className=" h-full w-2/3">
-          <CategoryList />
-          <div>
-            <ScrollArea className="h-96 w-full ">
-              <div className="flex flex-col">
-                <AsyncData loading={isLoading} error={error}>
-                  {products?.map((product: Product) => (
-                    <div key={product.id} className="mx-8">
-                      <div className="flex justify-between rounded-lg border p-4">
-                        <div className="mb-2 flex justify-between">
-                          <img
-                            src={`/productImages/${product.url}`}
-                            alt={product.name}
-                            className="h-20 w-20 rounded-lg object-cover"
-                          />
-                        </div>
-                        <div className="mb-2 flex items-center px-8 text-xl font-semibold">
-                          {product.name}
-                        </div>
-                        <div className="flex grow items-center justify-end pr-3">
-                          <div className="pr-6 text-xl text-indigo-600">
-                            €{product.price}
-                          </div>
-                          <div className="flex">
-                            <Input
-                              className="shrink-1 w-16 rounded text-center"
-                              placeholder="Qty"
-                            ></Input>
-                            <Button className="">Add to Cart</Button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </AsyncData>
-              </div>
-            </ScrollArea>
-          </div>
-        </div>
-        <div className="flex w-full">
-          <h1 className="flex w-full items-center justify-center text-4xl">
-            CART
-          </h1>
-        </div>
-      </div>
-    </>
-  );
-}
+export default ProductList;
