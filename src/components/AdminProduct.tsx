@@ -1,29 +1,17 @@
+import { Edit3, Trash2 } from "lucide-react";
 import { Product } from "~/types";
-import { Button } from "./ui/button";
-import { memo, useCallback } from "react";
-import { on } from "events";
-import { Trash2, Edit3 } from "lucide-react";
-import { DeleteButton } from "./DeleteButton";
 
-type AdminProductProps = {
+interface AdminProductProps {
   product: Product;
-  onDelete: (id: number) => void;
   onEdit: (id: number) => void;
-};
+  onDelete: (id: number) => void;
+}
 
-export default memo(function AdminProduct({
+const AdminProduct: React.FC<AdminProductProps> = ({
   product,
-  onDelete,
   onEdit,
-}: AdminProductProps) {
-  const handleDelete = useCallback(() => {
-    onDelete(product.id);
-  }, [onDelete, product.id]);
-
-  const handleEdit = useCallback(() => {
-    onEdit(product.id);
-  }, [onEdit, product.id]);
-
+  onDelete,
+}) => {
   return (
     <div key={product.id} className="">
       <div className=" items-center justify-center rounded-lg border p-4">
@@ -39,11 +27,18 @@ export default memo(function AdminProduct({
         </div>
         <div className="flex items-center justify-between pr-3">
           <div>
-            <Edit3 onClick={handleEdit}>Edit Product</Edit3>
-            <Trash2 onClick={handleDelete}> Delete Product</Trash2>
+            <Edit3 onClick={onEdit} className="cursor-pointer">
+              Edit Product
+            </Edit3>
+            <Trash2 onClick={onDelete} className="cursor-pointer">
+              {" "}
+              Delete Product
+            </Trash2>
           </div>
         </div>
       </div>
     </div>
   );
-});
+};
+
+export default AdminProduct;

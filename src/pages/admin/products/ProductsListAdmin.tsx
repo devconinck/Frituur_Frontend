@@ -1,31 +1,29 @@
-import { useState } from "react";
-import { Product } from "src/types";
-import AdminProduct from "~/components/AdminProduct";
+import { Product } from "~/types";
+import AdminProduct from "src/components/AdminProduct";
 
-export default function ProductsListAdmin({
-  products,
-  onDelete,
-  onEdit,
-}: {
+interface ProductListAdminProps {
   products: Product[];
-  onDelete: (id: number) => void;
-  onEdit: (id: number) => void;
-}) {
+  onEdit: (product: Product) => void;
+  onDelete: (productId: number) => void;
+}
+
+const ProductListAdmin: React.FC<ProductListAdminProps> = ({
+  products,
+  onEdit,
+  onDelete,
+}) => {
   return (
-    <div className="flex flex-row">
-      <div className="mt h-full w-full">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {products?.map((product: Product) => (
-            <AdminProduct
-              {...product}
-              product={product}
-              key={product.id}
-              onDelete={onDelete}
-              onEdit={onEdit}
-            />
-          ))}
-        </div>
-      </div>
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {products.map((product) => (
+        <AdminProduct
+          key={product.id}
+          product={product}
+          onEdit={(id) => onEdit(product)}
+          onDelete={() => onDelete(product.id)}
+        />
+      ))}
     </div>
   );
-}
+};
+
+export default ProductListAdmin;

@@ -1,39 +1,53 @@
-import React, { useState, useEffect } from "react";
-import ProductsListAdmin from "./ProductsListAdmin";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 import AddOrEdit from "./AddOrEdit";
+import { Product } from "../../../types";
+import AdminLayout from "../layout";
 import { useGetAllProducts } from "~/hooks/products";
-import { Product } from "~/types";
-import { updateProduct } from "~/pages/api/products";
+import { Separator } from "~/components/ui/separator";
+import ProductListAdmin from "./ProductsListAdmin";
 
-export default function AdminProducts() {
-  const { data: products = [], isLoading, error } = useGetAllProducts();
-  const [currentProduct, setCurrentProduct] = useState({});
+const AdminPage: React.FC = () => {
+  const { data: products = [] } = useGetAllProducts();
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-  const handleEdit = (product: Product) => {
-    setCurrentProduct(product);
+  const methods = useForm<Product>();
+  const { handleSubmit, reset } = methods;
+
+  const handleFormSubmit = (data: Product) => {
+    // Handle form submission (save or add product)
+    // You'll need to implement the logic to interact with your database here
   };
 
-  const handleDelete = (id: number) => {
-    // Implement deleting a product
+  const handleEditProduct = (product: Product) => {
+    setSelectedProduct(product);
+    reset(product); // Reset the form with the selected product data
   };
 
-  const handleAddProduct = () => {
-    setCurrentProduct({});
-  };
-
-  const handleSaveProduct = (product: Product) => {
-    updateProduct(product.id, product);
+  const handleDeleteProduct = (productId: number) => {
+    // Implement the delete functionality
   };
 
   return (
-    <div>
-      <h1>Admin Products</h1>
-      <AddOrEdit product={currentProduct} onSave={handleSaveProduct} />
-      <ProductsListAdmin
-        products={products}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-      />
-    </div>
+    <AdminLayout>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold">Admin Page</h1>
+        <Separator />
+
+        <AddOrEdit
+          product={methods.watch()}
+          methods={methods}
+          onSubmit={handleSubmit(handleFormSubmit)}
+        />
+        <Separator />
+        <ProductListAdmin
+          products={products}
+          onEdit={handleEditProduct}
+          onDelete={handleDeleteProduct}
+        />
+      </div>
+    </AdminLayout>
   );
-}
+};
+
+export default AdminPage;

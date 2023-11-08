@@ -1,6 +1,5 @@
 import { Separator } from "src/components/ui/separator";
 import { SidebarNav } from "src/components/ui/sidebar-nav";
-import { Product } from "~/types";
 
 const sidebarNavItems = [
   {
@@ -24,7 +23,7 @@ interface AdminLayoutProps {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
     <>
-      <div className="hidden space-y-6 p-10 pb-16 md:block">
+      <div className=" space-y-6 p-10 pb-16 md:block">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Admin Options</h2>
           <p className="text-muted-foreground">

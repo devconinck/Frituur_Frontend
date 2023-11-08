@@ -1,168 +1,103 @@
-import React, { useEffect, useCallback } from "react";
-import { useForm, FormProvider, useFormContext } from "react-hook-form";
-import useSWRMutation from "swr/mutation";
-import { Category } from "~/types";
-import Error from "~/components/Error";
-import { Button } from "src/components/ui/button";
-import { useGetAllCategories } from "~/hooks/categories";
-import { useUpdateProduct } from "~/hooks/products";
-import { useMutation } from "@tanstack/react-query";
+import React from "react";
+import { UseFormMethods, UseFormState } from "react-hook-form";
+import { Product } from "../../../types";
+import { Button } from "~/components/ui/button";
 
-const validationRules = {
-  name: {
-    required: "A name is required",
-    minLength: { value: 3, message: "Minimum length is 3" },
-  },
-  price: {
-    valueAsNumber: true,
-    required: "A price is required",
-    min: { value: 0, message: "Price must be positive" },
-    max: {
-      value: 100,
-      message: "Price should be less than 100",
-    },
-  },
-  category: { required: "A category is required" },
-  description: {},
+interface AddOrEditProps {
+  product: UseFormState<Product>;
+  methods: UseFormMethods<Product>;
+  onSubmit: () => void;
+}
+
+const AddOrEdit: React.FC<AddOrEditProps> = ({
+  product,
+  methods,
+  onSubmit,
+}) => {
+  const { register, handleSubmit } = methods;
+
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="rounded-lg bg-white p-4 shadow-md"
+    >
+      <div className="mb-4">
+        <label
+          htmlFor="name"
+          className="mb-2 block font-semibold text-gray-700"
+        >
+          Product Name
+        </label>
+        <input
+          type="text"
+          id="name"
+          {...register("name")}
+          placeholder="Product Name"
+          className="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+        />
+      </div>
+      <div className="mb-4">
+        <label
+          htmlFor="description"
+          className="mb-2 block font-semibold text-gray-700"
+        >
+          Description
+        </label>
+        <input
+          type="text"
+          id="description"
+          {...register("description")}
+          placeholder="Description"
+          className="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+        />
+      </div>
+      <div className="mb-4">
+        <label
+          htmlFor="price"
+          className="mb-2 block font-semibold text-gray-700"
+        >
+          Price
+        </label>
+        <input
+          type="number"
+          id="price"
+          {...register("price")}
+          placeholder="Price"
+          className="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+        />
+      </div>
+      <div className="mb-4">
+        <label htmlFor="url" className="mb-2 block font-semibold text-gray-700">
+          URL
+        </label>
+        <input
+          type="text"
+          id="url"
+          {...register("url")}
+          placeholder="URL"
+          className="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+        />
+      </div>
+      <div className="mb-4">
+        <label
+          htmlFor="categoryId"
+          className="mb-2 block font-semibold text-gray-700"
+        >
+          Category ID
+        </label>
+        <input
+          type="number"
+          id="categoryId"
+          {...register("categoryId")}
+          placeholder="Category ID"
+          className="w-full rounded border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+        />
+      </div>
+      <Button type="submit" className="" variant={"default"}>
+        Save / Add Product
+      </Button>
+    </form>
+  );
 };
 
-function LabelInput({ label, name, type, validationRules, ...rest }) {
-  const { register, errors, isSubmitting } = useFormContext();
-  const hasErrors = name in errors;
-
-  return (
-    <div>
-      <label htmlFor={name}>{label}</label>
-      <input
-        {...register(name, validationRules)}
-        id={name}
-        name={name}
-        type={type}
-        disabled={isSubmitting}
-        {...rest}
-      />
-      {hasErrors ? <div>{errors[name].message}</div> : null}
-    </div>
-  );
-}
-
-// Custom select component for categories
-function CategoriesSelect({ name, categories }) {
-  const { register, errors } = useFormContext();
-  const hasErrors = name in errors;
-
-  return (
-    <div>
-      <label htmlFor={name}>Categories</label>
-      <select {...register(name)} id={name}>
-        <option value="" defaultChecked>
-          -- Select a category --
-        </option>
-        {categories.map((category: Category) => (
-          <option key={category.id} value={category.name}>
-            {category.name}
-          </option>
-        ))}
-      </select>
-      {hasErrors ? <div>{errors[name].message}</div> : null}
-    </div>
-  );
-}
-
-export default function AddOrEdit({ currentProduct, onSave }) {
-  const product = currentProduct || {};
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors },
-    isSubmitting,
-  } = useForm();
-
-  const saveProduct = useMutation({
-    mutationFn: onSave,
-  });
-
-  const onSubmit = (data) => {
-    handleSave(data);
-  };
-
-  const handleSave = useCallback(
-    async (data) => {
-      const { name, description, price, category } = data;
-      await saveProduct({
-        name,
-        description,
-        price,
-        category,
-      });
-      reset();
-    },
-    [reset, saveProduct],
-  );
-
-  useEffect(() => {
-    if (product.id) {
-      setValue("name", product.name);
-      setValue("description", product.description);
-      setValue("price", product.price);
-      setValue("category", product.category);
-    } else {
-      reset();
-    }
-  }, [product, reset, setValue]);
-
-  const { data: categories = [] } = useGetAllCategories();
-
-  return (
-    <>
-      <FormProvider
-        handleSubmit={handleSubmit}
-        errors={errors}
-        register={register}
-      >
-        <form onSubmit={handleSubmit(onSubmit)} className="mb-5">
-          <div className="mb-3">
-            <LabelInput
-              label="Product name"
-              name="name"
-              type="text"
-              validationRules={validationRules.name}
-            />
-          </div>
-
-          <div className="mb-3">
-            <LabelInput
-              label="Description"
-              name="description"
-              type="text"
-              validationRules={validationRules.description}
-            />
-          </div>
-
-          <div className="mb-3">
-            <LabelInput
-              label="Price"
-              name="price"
-              type="number"
-              validationRules={validationRules.price}
-            />
-          </div>
-
-          <div className="mb-3">
-            <CategoriesSelect name="category" categories={categories} />
-          </div>
-
-          <div className="">
-            <div className="">
-              <Button type="submit" onClick={handleSave} className="">
-                {product.id ? "Save Product" : "Add Product"}
-              </Button>
-            </div>
-          </div>
-        </form>
-      </FormProvider>
-    </>
-  );
-}
+export default AddOrEdit;
