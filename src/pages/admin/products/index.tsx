@@ -10,10 +10,16 @@ import { getAllProducts } from "~/api/products";
 import useSWRMutation from "swr/mutation";
 import { deleteProduct } from "~/api/products";
 import { set } from "date-fns";
+import Loader from "~/components/Loader";
+import AsyncData from "~/components/AsyncData";
 
 const AdminPage: React.FC = () => {
-  const { data: products, mutate } = useSWR("products", getAllProducts);
-  const { trigger: productDelete } = useSWRMutation("products", deleteProduct);
+  const {
+    data: products,
+    mutate,
+    isLoading,
+    error,
+  } = useSWR("products", getAllProducts);
   const [currentProduct, setCurrentProduct] = useState({});
 
   const setProductToUpdate = useCallback(
@@ -21,6 +27,15 @@ const AdminPage: React.FC = () => {
       setCurrentProduct(id === null ? {} : products?.find((t) => t.id === id));
     },
     [products],
+  );
+
+  const deleteProducts = useCallback(
+    async (id: number) => {
+      await deleteProduct(id);
+      window.location.reload(); //moet dit doen want anders een error dat map geen function is => refresh zodat data opnieuw wordt opgehaald en de correcte items toont
+      mutate("products");
+    },
+    [deleteProduct, mutate],
   );
 
   return (
@@ -31,11 +46,13 @@ const AdminPage: React.FC = () => {
           currentProduct={currentProduct}
         />
         <Separator className="mb-5" />
-        <ProductListAdmin
-          products={products || []}
-          onEdit={setProductToUpdate}
-          onDelete={deleteProduct}
-        />
+        <AsyncData isLoading={isLoading} error={error}>
+          <ProductListAdmin
+            products={products || []}
+            onEdit={setProductToUpdate}
+            onDelete={deleteProducts}
+          />
+        </AsyncData>
       </div>
     </AdminLayout>
   );
