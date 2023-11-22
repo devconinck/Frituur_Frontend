@@ -4,7 +4,7 @@ import AdminProduct from "src/components/AdminProduct";
 interface ProductListAdminProps {
   products: Product[];
   onEdit: (product: Product) => void;
-  onDelete: (productId: number) => void;
+  onDelete: () => void;
 }
 
 const ProductListAdmin: React.FC<ProductListAdminProps> = ({
@@ -18,8 +18,8 @@ const ProductListAdmin: React.FC<ProductListAdminProps> = ({
         <AdminProduct
           key={product.id}
           product={product}
-          onEdit={(id) => onEdit(product)}
-          onDelete={() => onDelete(product.id)}
+          onEdit={onEdit}
+          onDelete={onDelete}
         />
       ))}
     </div>

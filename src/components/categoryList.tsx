@@ -1,8 +1,9 @@
 import React from "react";
-import { useGetAllCategories } from "~/hooks/categories";
 import { Category } from "~/types";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { Button } from "./ui/button";
+import useSWR from "swr";
+import { getAllCategories } from "~/api/categories";
 
 interface CategoryNavigationProps {
   selectedCategory: Category | null;
@@ -13,7 +14,11 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
   selectedCategory,
   setSelectedCategory,
 }) => {
-  const { data: categories = [], isLoading, error } = useGetAllCategories();
+  const {
+    data: categories,
+    isLoading,
+    error,
+  } = useSWR("categories", getAllCategories);
   return (
     <div className="">
       <h2 className="mb-2 text-xl font-semibold">Categories</h2>

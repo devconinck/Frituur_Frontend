@@ -1,49 +1,40 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import AddOrEdit from "./AddOrEdit";
 import { Product } from "../../../types";
 import AdminLayout from "../layout";
-import { useGetAllProducts } from "~/hooks/products";
 import { Separator } from "~/components/ui/separator";
 import ProductListAdmin from "./ProductsListAdmin";
+import useSWR from "swr";
+import { getAllProducts } from "~/api/products";
+import useSWRMutation from "swr/mutation";
+import { deleteProduct } from "~/api/products";
+import { set } from "date-fns";
 
 const AdminPage: React.FC = () => {
-  const { data: products = [] } = useGetAllProducts();
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const { data: products, mutate } = useSWR("products", getAllProducts);
+  const { trigger: productDelete } = useSWRMutation("products", deleteProduct);
+  const [currentProduct, setCurrentProduct] = useState({});
 
-  const methods = useForm<Product>();
-  const { handleSubmit, reset } = methods;
-
-  const handleFormSubmit = (data: Product) => {
-    // Handle form submission (save or add product)
-    // You'll need to implement the logic to interact with your database here
-  };
-
-  const handleEditProduct = (product: Product) => {
-    setSelectedProduct(product);
-    reset(product); // Reset the form with the selected product data
-  };
-
-  const handleDeleteProduct = (productId: number) => {
-    // Implement the delete functionality
-  };
+  const setProductToUpdate = useCallback(
+    (id: number) => {
+      setCurrentProduct(id === null ? {} : products?.find((t) => t.id === id));
+    },
+    [products],
+  );
 
   return (
     <AdminLayout>
       <div className="p-4">
-        <h1 className="text-2xl font-bold">Admin Page</h1>
-        <Separator />
-
         <AddOrEdit
-          product={methods.watch()}
-          methods={methods}
-          onSubmit={handleSubmit(handleFormSubmit)}
+          setProductToUpdate={setProductToUpdate}
+          currentProduct={currentProduct}
         />
-        <Separator />
+        <Separator className="mb-5" />
         <ProductListAdmin
-          products={products}
-          onEdit={handleEditProduct}
-          onDelete={handleDeleteProduct}
+          products={products || []}
+          onEdit={setProductToUpdate}
+          onDelete={deleteProduct}
         />
       </div>
     </AdminLayout>

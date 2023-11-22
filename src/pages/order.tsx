@@ -2,12 +2,17 @@ import React, { useState } from "react";
 import CategoryNavigation from "../components/categoryList";
 import ProductList from "../components/ProductsListUser";
 import Cart from "../components/Cart";
-import { useGetAllProducts } from "src/hooks/products";
 import { Category } from "~/types";
 import { Product } from "~/types";
+import useSWR from "swr";
+import { getAllProducts } from "~/api/products";
 
 const OrderPage: React.FC = () => {
-  const { data: products = [], isLoading, error } = useGetAllProducts();
+  const {
+    data: products,
+    isLoading,
+    error,
+  } = useSWR("products", getAllProducts);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null,
   );
