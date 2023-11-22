@@ -17,3 +17,20 @@ export type OrderItem = {
   orderId: number;
   quantity: number;
 };
+
+export type Order = {
+  id: number;
+  orderItems: OrderItem[];
+  customerId: number;
+  pickup: Date;
+};
+
+export type Customer = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  birthDate: Date;
+  email: string;
+  phone: string;
+  orders: Order[];
+};
