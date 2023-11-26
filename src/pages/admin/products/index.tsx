@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import AddOrEdit from "./AddOrEdit";
+import AddOrEdit from "../../../components/AddOrEdit";
 import { Product } from "../../../types";
 import AdminLayout from "../layout";
 import { Separator } from "~/components/ui/separator";
-import ProductListAdmin from "./ProductsListAdmin";
+import ProductListAdmin from "../../../components/ProductsListAdmin";
 import useSWR from "swr";
 import { getAllProducts } from "~/api/products";
 import useSWRMutation from "swr/mutation";

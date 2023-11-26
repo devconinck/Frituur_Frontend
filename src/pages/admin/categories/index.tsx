@@ -1,5 +1,5 @@
 import { Separator } from "~/components/ui/separator";
-import CategoriesForm from "./categoriesForm";
+import CategoriesForm from "../../../components/categoriesForm";
 import AdminLayout from "../layout";
 
 export default function Orders() {

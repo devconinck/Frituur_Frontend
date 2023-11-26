@@ -1,5 +1,5 @@
 import { Separator } from "~/components/ui/separator";
-import OrdersForm from "./ordersForm";
+import OrdersForm from "../../../components/ordersForm";
 import SettingsLayout from "../layout";
 
 export default function Orders() {

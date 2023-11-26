@@ -21,7 +21,16 @@ export const getOneOrder = async (OrderId: number): Promise<Order> => {
   }
 };
 
-export const saveOrders = async (Order) => {
+export const getOrdersByUserId = async (userId: number): Promise<Order[]> => {
+  try {
+    return await axios.get(`${baseUrl}/user/${userId}`).then((res) => res.data);
+  } catch (error) {
+    console.error("Error fetching Orders by User ID: ", error);
+    throw error;
+  }
+};
+
+export const saveOrders = async (Order: Order) => {
   if (!Order) {
     // Handle the case where the Order is undefined
     console.error("Order is undefined");
