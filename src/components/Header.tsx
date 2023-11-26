@@ -5,7 +5,7 @@ import Container from "./ui/container";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "src/components/ui/sheet";
 import { Menu, Moon, ShoppingCart, Sun } from "lucide-react";
-import { ProfileButton } from "./ui/profile-button";
+import { ProfileButton } from "./profile-button";
 import ModeToggle from "./ModeToggle";
 //import ProfileButton from "./ui/ProfileButton";
 

@@ -5,7 +5,7 @@ const Admin: NextPage = () => {
   return (
     <>
       <AdminLayout>
-        <div>
+        <div className="space-y-6">
           <div className="flex items-center justify-center text-4xl ">
             <p>Admin page</p>
           </div>

@@ -35,7 +35,7 @@ export function ProfileButton() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <Link href="/account/my-orders">
+          <Link href="/account/orders">
             <DropdownMenuItem>My Orders</DropdownMenuItem>
           </Link>
           <Link href="/account/customer-card">

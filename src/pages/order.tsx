@@ -27,10 +27,6 @@ const OrderPage: React.FC = () => {
     setCart(updatedCart);
   };
 
-  const calculateTotalPrice = () => {
-    return cart.reduce((total, item) => total + item.price, 0);
-  };
-
   if (!products) return null;
 
   return (

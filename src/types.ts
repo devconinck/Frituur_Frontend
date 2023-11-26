@@ -14,15 +14,17 @@ export type Category = {
 
 export type OrderItem = {
   productId: number;
+  product: Product;
   orderId: number;
   quantity: number;
 };
 
 export type Order = {
   id: number;
-  orderItems: OrderItem[];
+  items: OrderItem[];
   customerId: number;
   pickup: Date;
+  customer: Customer;
 };
 
 export type Customer = {
