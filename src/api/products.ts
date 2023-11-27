@@ -1,7 +1,16 @@
-import axios from "axios";
+import axiosRoot from "axios";
 import { Product } from "~/types";
 
 const baseUrl = `http://localhost:8080/products`;
+
+export const axios = axiosRoot.create({
+  baseURL: baseUrl,
+});
+
+export const setAuthToken = (token: string) => {
+  if (token) axios.defaults.headers["Authorization"] = `Bearer ${token}`;
+  else delete axios.defaults.headers["Authorization"];
+};
 
 export const getAllProducts = async (): Promise<Product[] | null> => {
   try {
