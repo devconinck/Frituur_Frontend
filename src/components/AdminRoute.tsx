@@ -2,9 +2,9 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useAuth } from "~/contexts/auth.contexts";
 
-const PrivateRoute = ({ children }) => {
+const AdminRoute = ({ children }) => {
   const router = useRouter();
-  const { ready, isAuthed } = useAuth();
+  const { ready, isAdmin } = useAuth();
 
   const loginPath = `/login?redirect=${router.asPath}`;
 
@@ -24,11 +24,11 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
-  if (!isAuthed) {
+  if (!isAdmin) {
     router.replace(loginPath);
   }
 
   return <>{children}</>;
 };
 
-export default PrivateRoute;
+export default AdminRoute;

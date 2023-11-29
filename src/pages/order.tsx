@@ -6,6 +6,7 @@ import { Category } from "~/types";
 import { Product } from "~/types";
 import useSWR from "swr";
 import { getAllProducts } from "~/api/products";
+import PrivateRoute from "~/components/PrivateRoute";
 
 const OrderPage: React.FC = () => {
   const {
@@ -30,26 +31,28 @@ const OrderPage: React.FC = () => {
   if (!products) return null;
 
   return (
-    <div className="container mx-auto flex h-screen flex-col p-4 md:flex-row">
-      <div className="md:w-2/3 md:pr-4">
-        <h1 className="mb-4 text-2xl font-semibold">Webshop</h1>
+    <PrivateRoute>
+      <div className="container mx-auto flex h-screen flex-col p-4 md:flex-row">
+        <div className="md:w-2/3 md:pr-4">
+          <h1 className="mb-4 text-2xl font-semibold">Webshop</h1>
 
-        <CategoryNavigation
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-        />
+          <CategoryNavigation
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
 
-        <ProductList
-          products={products}
-          selectedCategory={selectedCategory}
-          addToCart={addToCart}
-        />
+          <ProductList
+            products={products}
+            selectedCategory={selectedCategory}
+            addToCart={addToCart}
+          />
+        </div>
+
+        <div className="mt-4 md:mt-0 md:w-1/3">
+          <Cart cart={cart} removeFromCart={removeFromCart} />
+        </div>
       </div>
-
-      <div className="mt-4 md:mt-0 md:w-1/3">
-        <Cart cart={cart} removeFromCart={removeFromCart} />
-      </div>
-    </div>
+    </PrivateRoute>
   );
 };
 

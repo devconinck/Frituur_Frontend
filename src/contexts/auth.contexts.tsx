@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useContext,
+  ReactNode,
 } from "react";
 import useSWRMutation from "swr/mutation";
 import * as api from "../api/index";
@@ -15,8 +16,10 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
-export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(null);
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [token, setToken] = useState("");
   const [user, setUser] = useState(null);
   const [ready, setReady] = useState(false);
   const [isAuthed, setIsAuthed] = useState(false);
@@ -40,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     isMutating: loading,
     error,
     trigger: doLogin,
-  } = useSWRMutation("customers", api.post);
+  } = useSWRMutation("login", api.post);
 
   useEffect(() => {
     api.setAuthToken(token);
@@ -59,8 +62,9 @@ export const AuthProvider = ({ children }) => {
         setToken(token);
         setUser(user);
 
-        localStorage.setItem(JWT_TOKEN_KEY, token);
         localStorage.setItem(USER_ID_KEY, user.id);
+
+        localStorage.setItem(JWT_TOKEN_KEY, token);
 
         return true;
       } catch (error) {
@@ -71,14 +75,40 @@ export const AuthProvider = ({ children }) => {
     [doLogin],
   );
 
+  const isAdmin = useMemo(() => {
+    return user?.role === "admin";
+  }, [user]);
+
   const logout = useCallback(() => {
-    setToken(null);
+    setToken("");
     setUser(null);
 
     localStorage.removeItem(JWT_TOKEN_KEY);
     localStorage.removeItem(USER_ID_KEY);
   }, []);
 
+  const {
+    isMutating: registerLoading,
+    error: registerError,
+    trigger: doRegister,
+  } = useSWRMutation("register", api.post);
+
+  const register = useCallback(
+    async (name, email, password) => {
+      try {
+        const response = await doRegister({
+          name,
+          email,
+          password,
+        });
+        return response;
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    },
+    [doRegister],
+  );
   const value = useMemo(
     () => ({
       token,
@@ -87,10 +117,27 @@ export const AuthProvider = ({ children }) => {
       ready,
       loading,
       isAuthed,
+      isAdmin,
+      registerLoading,
+      registerError,
       login,
       logout,
+      register,
     }),
-    [token, user, error, ready, loading, isAuthed, login, logout],
+    [
+      token,
+      user,
+      error,
+      ready,
+      loading,
+      isAuthed,
+      isAdmin,
+      registerLoading,
+      registerError,
+      login,
+      logout,
+      register,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

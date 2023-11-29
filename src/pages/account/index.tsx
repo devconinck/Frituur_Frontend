@@ -1,10 +1,11 @@
 import { AccountForm } from "~/components/AccountForm";
 import { Separator } from "~/components/ui/separator";
 import SettingsLayout from "./layout";
+import PrivateRoute from "~/components/PrivateRoute";
 
 export default function MyAccount() {
   return (
-    <>
+    <PrivateRoute>
       <SettingsLayout>
         <div className="space-y-6">
           <div>
@@ -18,6 +19,6 @@ export default function MyAccount() {
           <AccountForm />
         </div>
       </SettingsLayout>
-    </>
+    </PrivateRoute>
   );
 }

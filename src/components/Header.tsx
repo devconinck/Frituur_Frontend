@@ -7,9 +7,11 @@ import { Sheet, SheetContent, SheetTrigger } from "src/components/ui/sheet";
 import { Menu, Moon, ShoppingCart, Sun } from "lucide-react";
 import { ProfileButton } from "./profile-button";
 import ModeToggle from "./ModeToggle";
+import { useAuth } from "~/contexts/auth.contexts";
 //import ProfileButton from "./ui/ProfileButton";
 
 const Header = () => {
+  const { isAuthed } = useAuth();
   const routes = [
     {
       href: "/",
@@ -67,7 +69,13 @@ const Header = () => {
               <Button className="mr-4">Order</Button>
             </Link>
             <ModeToggle />
-            <ProfileButton />
+            {isAuthed ? (
+              <ProfileButton />
+            ) : (
+              <Link href="/login">
+                <Button>Login</Button>
+              </Link>
+            )}
           </div>
         </div>
       </Container>

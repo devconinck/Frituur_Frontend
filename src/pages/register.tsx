@@ -1,23 +1,27 @@
+// Register.tsx
 import { NextPage } from "next";
-import { redirect } from "next/navigation";
-import { useCallback } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { useAuth } from "~/contexts/auth.contexts";
-import Error from "~/components/Error";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/router";
+import { useCallback } from "react";
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
+  AlertDialogTrigger,
   AlertDialogContent,
   AlertDialogDescription,
-  AlertDialogFooter,
+  AlertDialogAction,
   AlertDialogHeader,
-  AlertDialogTrigger,
+  AlertDialogFooter,
 } from "~/components/ui/alert-dialog";
 
-function LabelInput({ label, name, type, validationRules, ...rest }) {
+interface FormData {
+  name: string;
+  email: string;
+  password: string;
+}
+
+function LabelInput({ label, name, type, validationRules, ...rest }: any) {
   const {
     register,
     formState: { errors, isSubmitting },
@@ -44,6 +48,9 @@ function LabelInput({ label, name, type, validationRules, ...rest }) {
 }
 
 const validationRules = {
+  name: {
+    required: "Name is required",
+  },
   email: {
     required: "Email is required",
     pattern: {
@@ -60,50 +67,64 @@ const validationRules = {
   },
 };
 
-export const Login: NextPage = () => {
-  const { error, loading, login } = useAuth();
-  const methods = useForm({
+const Register: NextPage = () => {
+  const { registerError, registerLoading, register: registerUser } = useAuth();
+  const methods = useForm<FormData>({
     defaultValues: {
-      email: "Quinten@gmail.com",
-      password: "StrongPassword1",
+      name: "",
+      email: "",
+      password: "",
     },
   });
   const router = useRouter();
   const { handleSubmit, reset } = methods;
 
-  const handleCancel = useCallback(() => {
+  const handleCancel = () => {
     reset();
-  }, [reset]);
+  };
 
-  const handleRegister = useCallback(() => {
-    router.replace("/register");
-  }, [redirect]);
+  const handleLogin = () => {
+    router.push("/login");
+  };
 
-  const handleLogin = useCallback(
-    async ({ email, password }) => {
-      const loggedIn = await login(email, password);
+  const handleRegister = useCallback(
+    async (data: FormData) => {
+      const registered = await registerUser(
+        data.name,
+        data.email,
+        data.password,
+      );
 
-      if (loggedIn) {
-        return router.push("/order");
+      if (registered) {
+        router.push("/login");
+        console.log("registered");
       }
     },
-    [router.push, login],
+    [registerUser],
   );
+
   return (
     <AlertDialog defaultOpen>
+      <AlertDialogTrigger asChild></AlertDialogTrigger>
       <AlertDialogContent>
         <FormProvider {...methods}>
           <div className="container max-w-2xl">
             <form
               className="flex flex-col"
-              onSubmit={handleSubmit(handleLogin)}
+              onSubmit={handleSubmit(handleRegister)}
             >
-              <AlertDialogHeader>Sign in</AlertDialogHeader>
+              <AlertDialogHeader>Create an account</AlertDialogHeader>
               <AlertDialogDescription>
-                <Error error={error} />
+                <LabelInput
+                  label="Name"
+                  type="text"
+                  name="name"
+                  placeholder="Joske Vermeulen"
+                  validationRules={validationRules.name}
+                />
 
                 <LabelInput
-                  label="email"
+                  label="Email"
                   type="text"
                   name="email"
                   placeholder="your@email.com"
@@ -111,7 +132,7 @@ export const Login: NextPage = () => {
                 />
 
                 <LabelInput
-                  label="password"
+                  label="Password"
                   type="password"
                   name="password"
                   validationRules={validationRules.password}
@@ -120,14 +141,12 @@ export const Login: NextPage = () => {
               <AlertDialogFooter>
                 <div className=" flex justify-end">
                   <div className="">
-                    <AlertDialogAction
-                      className="mx-4"
-                      onClick={handleRegister}
-                    >
-                      I don't have an account
+                    <AlertDialogAction onClick={handleLogin} className="mx-2">
+                      I already have an account
                     </AlertDialogAction>
-                    <AlertDialogAction type="submit" disabled={loading}>
-                      Sign in
+
+                    <AlertDialogAction type="submit" disabled={registerLoading}>
+                      Register
                     </AlertDialogAction>
                   </div>
                 </div>
@@ -140,4 +159,4 @@ export const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default Register;

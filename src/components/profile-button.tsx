@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "src/components/ui/avatar";
 import { Button } from "src/components/ui/button";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,8 +11,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "src/components/ui/dropdown-menu";
+import { useAuth } from "~/contexts/auth.contexts";
+import { useCallback } from "react";
+import { useRouter } from "next/router";
 
 export function ProfileButton() {
+  const { error, loading, logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = useCallback(async () => {
+    logout();
+
+    router.push("/login");
+  }, [logout]);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -46,7 +59,7 @@ export function ProfileButton() {
           </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Log out</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

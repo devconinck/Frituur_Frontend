@@ -39,22 +39,20 @@ const AdminPage: React.FC = () => {
   );
 
   return (
-    <AdminLayout>
-      <div className="p-4">
-        <AddOrEdit
-          setProductToUpdate={setProductToUpdate}
-          currentProduct={currentProduct}
+    <div className="p-4">
+      <AddOrEdit
+        setProductToUpdate={setProductToUpdate}
+        currentProduct={currentProduct}
+      />
+      <Separator className="mb-5" />
+      <AsyncData isLoading={isLoading} error={error}>
+        <ProductListAdmin
+          products={products || []}
+          onEdit={setProductToUpdate}
+          onDelete={deleteProducts}
         />
-        <Separator className="mb-5" />
-        <AsyncData isLoading={isLoading} error={error}>
-          <ProductListAdmin
-            products={products || []}
-            onEdit={setProductToUpdate}
-            onDelete={deleteProducts}
-          />
-        </AsyncData>
-      </div>
-    </AdminLayout>
+      </AsyncData>
+    </div>
   );
 };
 
