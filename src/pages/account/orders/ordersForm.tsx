@@ -1,14 +1,16 @@
-import useSWR from "swr";
 import { getOrdersByUserId } from "~/api/orders";
+import useSWR from "swr";
 import { Order } from "~/types";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { format } from "date-fns";
+import { useAuth } from "~/contexts/auth.contexts";
 
 export default function OrdersForm() {
+  const { user } = useAuth();
   const { data: orders = [] } = useSWR<Order[]>("/orders", () =>
-    getOrdersByUserId(6),
+    getOrdersByUserId(user?.id),
   );
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
 
