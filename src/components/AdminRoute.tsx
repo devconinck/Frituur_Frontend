@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
 import { useAuth } from "~/contexts/auth.contexts";
@@ -25,7 +26,19 @@ const AdminRoute = ({ children }) => {
   }
 
   if (!isAdmin) {
-    router.replace(loginPath);
+    return (
+      <div>
+        <div className="text-2xl text-red-500">
+          You do not have access to this application!
+        </div>
+        <div className="text-xl text-red-500">
+          Please return to the homepage{" "}
+          <Link className="text-slate-500" href={"localhost:3000/"}>
+            here
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return <>{children}</>;

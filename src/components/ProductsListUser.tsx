@@ -14,7 +14,7 @@ const ProductList: React.FC<ProductListProps> = ({
   addToCart,
 }) => {
   return (
-    <div className="">
+    <div className="rounded-lg  p-6 shadow-md">
       <h2 className="mb-2 text-xl font-semibold">
         {selectedCategory
           ? `Products in ${selectedCategory.name}`
@@ -28,34 +28,30 @@ const ProductList: React.FC<ProductListProps> = ({
                 !selectedCategory || product.categoryId === selectedCategory.id,
             )
             .map((product) => (
-              <li key={product.id} className="mb-2">
-                <div className="flex items-center justify-between">
-                  <div className="flex space-x-4">
-                    <img
-                      src={`/productImages/${product.url}`}
-                      alt={product.name}
-                      className="h-16 w-16 rounded-lg"
-                    />
-                    <div>
-                      <span className="font-semibold">{product.name}</span>
-                      <span className="block text-sm text-gray-500">
-                        ${product.price}
-                      </span>
-                    </div>
-                  </div>
-                  <div>
-                    <button
-                      className="rounded bg-blue-500 p-1 text-white"
-                      onClick={() => addToCart(product)}
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
+              <li
+                key={product.id}
+                className="flex justify-between border-b py-2"
+              >
+                <div className="flex space-x-4">
+                  <img
+                    src={`/productImages/${product.url}`}
+                    alt={product.name}
+                    className="h-16 w-16 rounded-lg"
+                  />
+                  <p className="font-semibold">{product.name}</p>
+                  <p>
+                    ${product.price ? Number(product.price).toFixed(2) : "0.00"}
+                  </p>
                 </div>
+                <button
+                  className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                  onClick={() => addToCart(product)}
+                >
+                  Add to Cart
+                </button>
               </li>
             ))}
         </ul>
-        <ScrollBar orientation="vertical" />
       </ScrollArea>
     </div>
   );

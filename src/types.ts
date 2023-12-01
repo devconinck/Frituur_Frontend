@@ -36,3 +36,8 @@ export type Customer = {
   phone: string;
   orders: Order[];
 };
+
+export type CartItem = {
+  product: Product;
+  quantity: number;
+};

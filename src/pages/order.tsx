@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import CategoryNavigation from "../components/categoryList";
 import ProductList from "../components/ProductsListUser";
 import Cart from "../components/Cart";
-import { Category } from "~/types";
+import { CartItem, Category } from "~/types";
 import { Product } from "~/types";
 import useSWR from "swr";
 import { getAllProducts } from "~/api/products";
@@ -17,14 +17,26 @@ const OrderPage: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null,
   );
-  const [cart, setCart] = useState<Product[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
 
   const addToCart = (product: Product) => {
-    setCart([...cart, product]);
+    const existingItem = cart.find((item) => item.product.id === product.id);
+
+    if (existingItem) {
+      setCart(
+        cart.map((item) =>
+          item.product.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item,
+        ),
+      );
+    } else {
+      setCart([...cart, { product, quantity: 1 }]);
+    }
   };
 
   const removeFromCart = (productId: number) => {
-    const updatedCart = cart.filter((item) => item.id !== productId);
+    const updatedCart = cart.filter((item) => item.product.id !== productId);
     setCart(updatedCart);
   };
 

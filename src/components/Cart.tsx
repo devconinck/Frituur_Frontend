@@ -1,52 +1,40 @@
 import React from "react";
-import { Product } from "~/types";
+import { CartItem } from "~/types";
+import { Button } from "./ui/button";
 
 interface CartProps {
-  cart: Product[];
+  cart: CartItem[];
   removeFromCart: (productId: number) => void;
 }
 
 const Cart: React.FC<CartProps> = ({ cart, removeFromCart }) => {
-  const calculateTotalPrice = () => {
-    return cart.reduce((total, item) => total + item.price, 0);
-  };
+  const totalPrice = cart.reduce(
+    (total, item) => total + item.product.price * item.quantity,
+    0,
+  );
 
   return (
-    <div className="mt-4 rounded border p-4">
-      <h2 className="mb-2 text-xl font-semibold">Cart</h2>
+    <div className="rounded-lg p-6 shadow-md">
+      <h2 className="mb-4 text-2xl font-bold">Your Cart</h2>
       <ul>
-        {cart.map((item) => (
-          <li key={item.id} className="mb-2 border-b pb-2">
-            <div className="flex items-center justify-between">
-              <div>
-                <span className="font-semibold">{item.name}</span>
-                <div className="mt-1 flex items-center space-x-2">
-                  <button
-                    className="rounded bg-blue-500 p-1 text-white hover:bg-blue-600"
-                    onClick={() => removeFromCart(item.id)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <span className="font-semibold">Quantity:</span>
-                <span className="ml-2">1</span>{" "}
-              </div>
-              <div className="font-semibold">${item.price}</div>
+        {cart.map((item, index) => (
+          <li key={index} className="flex justify-between border-b py-2">
+            <div>
+              <p className="font-semibold">{item.product.name}</p>
+              <p>Quantity: {item.quantity}</p>
             </div>
+            <p className="text-right">
+              ${Number(item.product.price).toFixed(2)}
+            </p>
           </li>
         ))}
       </ul>
-      <div className="mt-4 border-t pt-2">
-        <div className="flex items-center justify-between">
-          <span className="font-semibold">Total Price:</span>
-          <span className="font-semibold">${calculateTotalPrice()}</span>
-        </div>
-        <button className="mt-2 rounded bg-blue-500 p-2 text-white hover:bg-blue-600">
-          Checkout
-        </button>
-      </div>
+      <p className="mt-4 text-right text-lg font-bold">
+        Total: ${totalPrice.toFixed(2)}
+      </p>
+      <Button className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+        Checkout
+      </Button>
     </div>
   );
 };

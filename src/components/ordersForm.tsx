@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { getAllOrders } from "~/api/orders"; // Assuming you have updated your API method
+import { getAllOrders } from "~/api/orders";
 import { Order } from "~/types";
 
 import { useState } from "react";
