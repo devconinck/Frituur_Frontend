@@ -50,6 +50,9 @@ export const createOrderItem = async (
   }
 };
 
-export const deleteOrderItem = async (url, { arg: id }) => {
+export const deleteOrderItem = async (
+  url: string,
+  { arg: id }: { arg: number },
+) => {
   await axios.delete(`${baseUrl}/${url}/${id}`);
 };

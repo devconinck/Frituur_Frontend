@@ -25,12 +25,22 @@ const PrivateRoute = ({ children }) => {
   }
 
   if (!isAuthed) {
-    router.replace(loginPath);
+    return (
+      <div>
+        <div>
+          <div>
+            <h1>Not logged in</h1>
+            <p>
+              You are not logged in. Please <a href={loginPath}>login</a> to
+              continue
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return <>{children}</>;
 };
 
 export default PrivateRoute;
-
-

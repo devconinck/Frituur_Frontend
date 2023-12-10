@@ -69,11 +69,7 @@ export const Login: NextPage = () => {
     },
   });
   const router = useRouter();
-  const { handleSubmit, reset } = methods;
-
-  const handleCancel = useCallback(() => {
-    reset();
-  }, [reset]);
+  const { handleSubmit } = methods;
 
   const handleRegister = useCallback(() => {
     router.replace("/register");
@@ -83,60 +79,68 @@ export const Login: NextPage = () => {
     async ({ email, password }) => {
       const loggedIn = await login(email, password);
 
+      const { redirect } = router.query;
+
+      console.log("redirect", redirect);
+
       if (loggedIn) {
-        return router.push("/order");
+        router.push(
+          `http://localhost:3000${redirect ? String(redirect) : "/"}`,
+        );
       }
     },
     [router.push, login],
   );
   return (
-    <AlertDialog defaultOpen>
-      <AlertDialogContent>
-        <FormProvider {...methods}>
-          <div className="container max-w-2xl">
-            <form
-              className="flex flex-col"
-              onSubmit={handleSubmit(handleLogin)}
-            >
-              <AlertDialogHeader>Sign in</AlertDialogHeader>
-              <AlertDialogDescription>
-                <Error error={error} />
+    <div>
+      <AlertDialog defaultOpen>
+        <AlertDialogContent>
+          <FormProvider {...methods}>
+            <div className="container max-w-2xl">
+              <form
+                className="flex flex-col"
+                onSubmit={handleSubmit(handleLogin)}
+              >
+                <AlertDialogHeader>Sign in</AlertDialogHeader>
+                <AlertDialogDescription>
+                  <Error error={error} />
 
-                <LabelInput
-                  label="email"
-                  type="text"
-                  name="email"
-                  placeholder="your@email.com"
-                  validationRules={validationRules.email}
-                />
+                  <LabelInput
+                    label="email"
+                    type="text"
+                    name="email"
+                    placeholder="your@email.com"
+                    validationRules={validationRules.email}
+                  />
 
-                <LabelInput
-                  label="password"
-                  type="password"
-                  name="password"
-                  validationRules={validationRules.password}
-                />
-              </AlertDialogDescription>
-              <AlertDialogFooter>
-                <div className=" flex justify-end">
-                  <div className="">
-                    <AlertDialogAction
-                      className="mx-4"
-                      onClick={handleRegister}
-                    >
-                      I don't have an account
-                    </AlertDialogAction>
-                    <AlertDialogAction type="submit" disabled={loading}>
-                      Sign in
-                    </AlertDialogAction>
+                  <LabelInput
+                    label="password"
+                    type="password"
+                    name="password"
+                    validationRules={validationRules.password}
+                  />
+                </AlertDialogDescription>
+                <AlertDialogFooter>
+                  <div className=" flex justify-end">
+                    <div className="">
+                      <AlertDialogAction
+                        className="mx-4"
+                        onClick={handleRegister}
+                      >
+                        I don't have an account
+                      </AlertDialogAction>
+                      <AlertDialogAction type="submit" disabled={loading}>
+                        Sign in
+                      </AlertDialogAction>
+                    </div>
                   </div>
-                </div>
-              </AlertDialogFooter>
-            </form>
-          </div>
-        </FormProvider>
-      </AlertDialogContent>
-    </AlertDialog>
+                </AlertDialogFooter>
+              </form>
+            </div>
+          </FormProvider>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
   );
 };
 

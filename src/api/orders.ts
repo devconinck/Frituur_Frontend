@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Order } from "~/types";
 
-const baseUrl = `http://localhost:8080/Orders`;
+const baseUrl = `http://localhost:8080/orders`;
 
 export const getAllOrders = async (): Promise<Order[] | null> => {
   try {
@@ -45,9 +45,9 @@ export const saveOrders = async (Order: Order) => {
   });
 };
 
-export const createOrder = async (OrderData: Order): Promise<Order> => {
+export const createOrder = async ({ customerId }): Promise<Order> => {
   try {
-    const response = await axios.post(baseUrl, OrderData);
+    const response = await axios.post(baseUrl, { customerId });
     return response.data;
   } catch (error) {
     console.error("Error creating a new Order: ", error);
@@ -55,6 +55,9 @@ export const createOrder = async (OrderData: Order): Promise<Order> => {
   }
 };
 
-export const deleteOrder = async (url, { arg: id }) => {
+export const deleteOrder = async (
+  url: string,
+  { arg: id }: { arg: number },
+) => {
   await axios.delete(`${baseUrl}/${url}/${id}`);
 };

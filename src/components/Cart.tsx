@@ -1,6 +1,9 @@
 import React from "react";
 import { CartItem } from "~/types";
 import { Button } from "./ui/button";
+import { createOrderItem } from "~/api/order-items";
+import { createOrder } from "~/api/orders";
+import { useAuth } from "~/contexts/auth.contexts";
 
 interface CartProps {
   cart: CartItem[];
@@ -12,6 +15,32 @@ const Cart: React.FC<CartProps> = ({ cart, removeFromCart }) => {
     (total, item) => total + item.product.price * item.quantity,
     0,
   );
+
+  const handleCheckout = async () => {
+    const customerId = Number(localStorage.getItem("userId"));
+
+    if (!customerId) {
+      console.error("User ID not found in local storage");
+      return;
+    }
+
+    console.log("Creating order for user", customerId);
+    try {
+      const response = await createOrder({ customerId });
+
+      if (response) {
+        cart.forEach(async (item) => {
+          await createOrderItem({
+            orderId: response.id,
+            productId: item.product.id,
+            quantity: item.quantity,
+          });
+        });
+      }
+    } catch (error) {
+      console.error("Failed to create order", error);
+    }
+  };
 
   return (
     <div className="rounded-lg p-6 shadow-md">
@@ -32,7 +61,10 @@ const Cart: React.FC<CartProps> = ({ cart, removeFromCart }) => {
       <p className="mt-4 text-right text-lg font-bold">
         Total: ${totalPrice.toFixed(2)}
       </p>
-      <Button className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+      <Button
+        onClick={handleCheckout}
+        className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+      >
         Checkout
       </Button>
     </div>
