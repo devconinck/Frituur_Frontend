@@ -1,5 +1,5 @@
 import { Separator } from "~/components/ui/separator";
-import OrdersForm from "../../../components/ordersForm";
+import OrdersFormAdmin from "../../../components/ordersFormAdmin";
 
 export default function Orders() {
   return (
@@ -8,7 +8,7 @@ export default function Orders() {
         <h3 className="text-lg font-medium">Admin Orders</h3>
       </div>
       <Separator />
-      <OrdersForm />
+      <OrdersFormAdmin />
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { format } from "date-fns";
 
-export default function OrdersForm() {
+export default function OrdersFormAdmin() {
   const { data: orders = [] } = useSWR("orders", getAllOrders);
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
 
@@ -30,7 +30,7 @@ export default function OrdersForm() {
               <p className="mb-2">Total Price: {orderTotal}</p>
               <p className="mb-2">
                 Order Date:{" "}
-                {format(new Date(order.pickup), "MMMM dd, yyyy HH:mm:ss")}
+                {format(new Date(order.createdAt), "MMMM dd, yyyy HH:mm:ss")}
               </p>
               <Button
                 onClick={() =>

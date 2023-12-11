@@ -81,8 +81,6 @@ export const Login: NextPage = () => {
 
       const { redirect } = router.query;
 
-      console.log("redirect", redirect);
-
       if (loggedIn) {
         router.push(
           `http://localhost:3000${redirect ? String(redirect) : "/"}`,
@@ -93,53 +91,41 @@ export const Login: NextPage = () => {
   );
   return (
     <div>
-      <AlertDialog defaultOpen>
-        <AlertDialogContent>
-          <FormProvider {...methods}>
-            <div className="container max-w-2xl">
-              <form
-                className="flex flex-col"
-                onSubmit={handleSubmit(handleLogin)}
+      <FormProvider {...methods}>
+        <div className="container max-w-2xl">
+          <form className="flex flex-col" onSubmit={handleSubmit(handleLogin)}>
+            <h1 className="text-2xl font-bold">Sign in</h1>
+            <Error error={error} />
+
+            <LabelInput
+              label="email"
+              type="text"
+              name="email"
+              placeholder="your@email.com"
+              validationRules={validationRules.email}
+            />
+
+            <LabelInput
+              label="password"
+              type="password"
+              name="password"
+              validationRules={validationRules.password}
+            />
+            <div className=" flex justify-end">
+              <Button
+                disabled={loading}
+                className="mx-4"
+                onClick={handleRegister}
               >
-                <AlertDialogHeader>Sign in</AlertDialogHeader>
-                <AlertDialogDescription>
-                  <Error error={error} />
-
-                  <LabelInput
-                    label="email"
-                    type="text"
-                    name="email"
-                    placeholder="your@email.com"
-                    validationRules={validationRules.email}
-                  />
-
-                  <LabelInput
-                    label="password"
-                    type="password"
-                    name="password"
-                    validationRules={validationRules.password}
-                  />
-                </AlertDialogDescription>
-                <AlertDialogFooter>
-                  <div className=" flex justify-end">
-                    <div className="">
-                      <AlertDialogAction
-                        className="mx-4"
-                        onClick={handleRegister}
-                      >
-                        I don't have an account
-                      </AlertDialogAction>
-                      <AlertDialogAction type="submit" disabled={loading}>
-                        Sign in
-                      </AlertDialogAction>
-                    </div>
-                  </div>
-                </AlertDialogFooter>
-              </form>
+                I don't have an account
+              </Button>
+              <Button type="submit" disabled={loading}>
+                Sign in
+              </Button>
             </div>
-          </FormProvider>
-        </AlertDialogContent>
-      </AlertDialog>
+          </form>
+        </div>
+      </FormProvider>
     </div>
   );
 };

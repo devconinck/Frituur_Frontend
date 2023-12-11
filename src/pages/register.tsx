@@ -104,58 +104,53 @@ const Register: NextPage = () => {
   );
 
   return (
-    <AlertDialog defaultOpen>
-      <AlertDialogTrigger asChild></AlertDialogTrigger>
-      <AlertDialogContent>
-        <FormProvider {...methods}>
-          <div className="container max-w-2xl">
-            <form
-              className="flex flex-col"
-              onSubmit={handleSubmit(handleRegister)}
-            >
-              <AlertDialogHeader>Create an account</AlertDialogHeader>
-              <AlertDialogDescription>
-                <LabelInput
-                  label="Name"
-                  type="text"
-                  name="name"
-                  placeholder="Joske Vermeulen"
-                  validationRules={validationRules.name}
-                />
+    <div>
+      <FormProvider {...methods}>
+        <div className="container max-w-2xl">
+          <form
+            className="flex flex-col"
+            onSubmit={handleSubmit(handleRegister)}
+          >
+            <h1 className="text-2xl font-bold">Create an account</h1>
+            <div>
+              <LabelInput
+                label="Name"
+                type="text"
+                name="name"
+                placeholder="Joske Vermeulen"
+                validationRules={validationRules.name}
+              />
 
-                <LabelInput
-                  label="Email"
-                  type="text"
-                  name="email"
-                  placeholder="your@email.com"
-                  validationRules={validationRules.email}
-                />
+              <LabelInput
+                label="Email"
+                type="text"
+                name="email"
+                placeholder="your@email.com"
+                validationRules={validationRules.email}
+              />
 
-                <LabelInput
-                  label="Password"
-                  type="password"
-                  name="password"
-                  validationRules={validationRules.password}
-                />
-              </AlertDialogDescription>
-              <AlertDialogFooter>
-                <div className=" flex justify-end">
-                  <div className="">
-                    <AlertDialogAction onClick={handleLogin} className="mx-2">
-                      I already have an account
-                    </AlertDialogAction>
+              <LabelInput
+                label="Password"
+                type="password"
+                name="password"
+                validationRules={validationRules.password}
+              />
+            </div>
+            <div className=" flex justify-end">
+              <div className="">
+                <Button onClick={handleLogin} className="mx-2">
+                  I already have an account
+                </Button>
 
-                    <AlertDialogAction type="submit" disabled={registerLoading}>
-                      Register
-                    </AlertDialogAction>
-                  </div>
-                </div>
-              </AlertDialogFooter>
-            </form>
-          </div>
-        </FormProvider>
-      </AlertDialogContent>
-    </AlertDialog>
+                <Button type="submit" disabled={registerLoading}>
+                  Register
+                </Button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </FormProvider>
+    </div>
   );
 };
 

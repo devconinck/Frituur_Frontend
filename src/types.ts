@@ -23,6 +23,7 @@ export type Order = {
   items: OrderItem[];
   customerId: number;
   customer: Customer;
+  createdAt: Date;
 };
 
 export type Customer = {

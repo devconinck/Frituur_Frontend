@@ -1,12 +1,30 @@
 import { useRouter } from "next/router";
 import React from "react";
 import { useAuth } from "~/contexts/auth.contexts";
+import Error from "~/components/Error";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from "~/components/ui/alert-dialog";
 
 const PrivateRoute = ({ children }) => {
   const router = useRouter();
   const { ready, isAuthed } = useAuth();
 
   const loginPath = `/login?redirect=${router.asPath}`;
+  const registerPath = `/register?redirect=${router.asPath}`;
+
+  const handleLogin = () => {
+    router.replace(loginPath);
+  };
+
+  const handleRegister = () => {
+    router.replace(registerPath);
+  };
 
   if (!ready) {
     return (
@@ -26,17 +44,24 @@ const PrivateRoute = ({ children }) => {
 
   if (!isAuthed) {
     return (
-      <div>
-        <div>
-          <div>
-            <h1>Not logged in</h1>
-            <p>
-              You are not logged in. Please <a href={loginPath}>login</a> to
-              continue
-            </p>
+      <AlertDialog defaultOpen>
+        <AlertDialogContent>
+          <div className="container flex max-w-2xl flex-col gap-y-4">
+            <AlertDialogHeader>
+              You must sign in to access this page
+            </AlertDialogHeader>
+            <AlertDialogDescription></AlertDialogDescription>
+            <AlertDialogFooter>
+              <AlertDialogAction className="" onClick={handleRegister}>
+                I don't have an account
+              </AlertDialogAction>
+              <AlertDialogAction onClick={handleLogin}>
+                Go to sign in
+              </AlertDialogAction>
+            </AlertDialogFooter>
           </div>
-        </div>
-      </div>
+        </AlertDialogContent>
+      </AlertDialog>
     );
   }
 

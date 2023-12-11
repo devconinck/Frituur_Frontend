@@ -8,9 +8,12 @@ import { format } from "date-fns";
 import { useAuth } from "~/contexts/auth.contexts";
 
 export default function OrdersForm() {
-  const { user } = useAuth();
+  let userId;
+  if (typeof localStorage !== "undefined") {
+    userId = localStorage.getItem("userId");
+  }
   const { data: orders = [] } = useSWR<Order[]>("/orders", () =>
-    getOrdersByUserId(user?.id),
+    getOrdersByUserId(userId),
   );
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
 
@@ -19,17 +22,19 @@ export default function OrdersForm() {
       <div className="mb-4">Check all your orders here</div>
       <div>
         {orders?.map((order) => {
-          const orderTotal = order.items?.reduce(
-            (total, item) => total + item.product.price * item.quantity,
-            0,
-          );
+          const orderTotal = order.items
+            ?.reduce(
+              (total, item) => total + item.product.price * item.quantity,
+              0,
+            )
+            .toFixed(2);
 
           return (
             <div key={order.id} className="m-3 rounded border p-3 shadow-md">
               <p className="mb-2">Total Price: {orderTotal}</p>
               <p className="mb-2">
                 Order Date:{" "}
-                {format(new Date(order.pickup), "MMMM dd, yyyy HH:mm:ss")}
+                {format(new Date(order.createdAt), "MMMM dd, yyyy HH:mm:ss")}
               </p>
               <Button
                 onClick={() =>
