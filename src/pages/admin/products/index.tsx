@@ -12,31 +12,35 @@ import { deleteProduct } from "~/api/products";
 import { set } from "date-fns";
 import Loader from "~/components/Loader";
 import AsyncData from "~/components/AsyncData";
+import { useQuery, useMutation, QueryClient } from "@tanstack/react-query";
+import { id } from "date-fns/locale";
+
+const queryClient = new QueryClient();
 
 const AdminPage: React.FC = () => {
-  const {
-    data: products,
-    mutate,
-    isLoading,
-    error,
-  } = useSWR("products", getAllProducts);
+  const productsQuery = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => await getAllProducts(),
+  });
+
+  const productsMutation = useMutation({
+    mutationKey: ["delete"],
+    mutationFn: async (id: number) => await deleteProduct(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["products"]);
+    },
+  });
+
   const [currentProduct, setCurrentProduct] = useState({});
 
-  const setProductToUpdate = useCallback(
-    (id: number) => {
-      setCurrentProduct(id === null ? {} : products?.find((t) => t.id === id));
-    },
-    [products],
-  );
+  if (productsQuery.isLoading) return <Loader />;
+  if (productsQuery.error) return <p>Error</p>;
 
-  const deleteProducts = useCallback(
-    async (id: number) => {
-      await deleteProduct(id);
-      window.location.reload(); //moet dit doen want anders een error dat map geen function is => refresh zodat data opnieuw wordt opgehaald en de correcte items toont
-      mutate("products");
-    },
-    [deleteProduct, mutate],
-  );
+  const products = productsQuery.data;
+
+  const setProductToUpdate = (id: number) => {
+    setCurrentProduct(id === null ? {} : products?.find((t) => t.id === id));
+  };
 
   return (
     <div className="p-4">
@@ -45,13 +49,12 @@ const AdminPage: React.FC = () => {
         currentProduct={currentProduct}
       />
       <Separator className="mb-5" />
-      <AsyncData isLoading={isLoading} error={error}>
-        <ProductListAdmin
-          products={products || []}
-          onEdit={setProductToUpdate}
-          onDelete={deleteProducts}
-        />
-      </AsyncData>
+
+      <ProductListAdmin
+        products={products}
+        onEdit={setProductToUpdate}
+        onDelete={(id) => productsMutation.mutate(id)}
+      />
     </div>
   );
 };
