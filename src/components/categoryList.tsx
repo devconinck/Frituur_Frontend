@@ -5,12 +5,12 @@ import { Button } from "./ui/button";
 import useSWR from "swr";
 import { getAllCategories } from "~/api/categories";
 
-interface CategoryNavigationProps {
+interface CategoryListProps {
   selectedCategory: Category | null;
   setSelectedCategory: (category: Category | null) => void;
 }
 
-const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
+const CategoryList: React.FC<CategoryListProps> = ({
   selectedCategory,
   setSelectedCategory,
 }) => {
@@ -20,7 +20,7 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
     error,
   } = useSWR("categories", getAllCategories);
   return (
-    <div className="">
+    <div className="mb-6">
       <h2 className="mb-2 text-xl font-semibold">Categories</h2>
       <ScrollArea className="whitespace-nowrap rounded-lg border p-4">
         <div className="flex space-x-4 overflow-x-auto">
@@ -41,4 +41,4 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
   );
 };
 
-export default CategoryNavigation;
+export default CategoryList;

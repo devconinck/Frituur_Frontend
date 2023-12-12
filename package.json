@@ -25,6 +25,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@t3-oss/env-nextjs": "^0.7.0",
     "@tanstack/react-query": "^4.36.1",
+    "@tanstack/react-query-devtools": "^5.13.5",
     "axios": "^1.5.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
@@ -44,6 +45,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.12.1",
     "@types/eslint": "^8.44.2",
     "@types/node": "^18.16.0",
     "@types/react": "^18.2.20",
@@ -64,10 +66,9 @@
     "initVersion": "7.21.0"
   },
   "packageManager": "pnpm@8.7.6",
-    "engines": {
-      "npm": ">=9.8.0",
-      "node": ">=20.6.0",
-      "yarn": ">=1.22.0"
-    }
-  
+  "engines": {
+    "npm": ">=9.8.0",
+    "node": ">=20.6.0",
+    "yarn": ">=1.22.0"
+  }
 }

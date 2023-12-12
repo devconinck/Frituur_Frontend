@@ -1,6 +1,7 @@
-import React from "react";
 import { Category, Product } from "~/types";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
+import Image from "next/image";
+import { Button } from "./ui/button";
 
 interface ProductListProps {
   products: Product[];
@@ -14,7 +15,7 @@ const ProductList: React.FC<ProductListProps> = ({
   addToCart,
 }) => {
   return (
-    <div className="rounded-lg  p-6 shadow-md">
+    <div className="rounded-lg shadow-md">
       <h2 className="mb-2 text-xl font-semibold">
         {selectedCategory
           ? `Products in ${selectedCategory.name}`
@@ -33,9 +34,11 @@ const ProductList: React.FC<ProductListProps> = ({
                 className="flex justify-between border-b py-2"
               >
                 <div className="flex space-x-4">
-                  <img
+                  <Image
                     src={`/productImages/${product.url}`}
                     alt={product.name}
+                    width={64}
+                    height={64}
                     className="h-16 w-16 rounded-lg"
                   />
                   <p className="font-semibold">{product.name}</p>
@@ -43,12 +46,12 @@ const ProductList: React.FC<ProductListProps> = ({
                     ${product.price ? Number(product.price).toFixed(2) : "0.00"}
                   </p>
                 </div>
-                <button
+                <Button
                   className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
                   onClick={() => addToCart(product)}
                 >
                   Add to Cart
-                </button>
+                </Button>
               </li>
             ))}
         </ul>

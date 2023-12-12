@@ -34,7 +34,7 @@ export default function OrdersForm() {
               <p className="mb-2">Total Price: {orderTotal}</p>
               <p className="mb-2">
                 Order Date:{" "}
-                {format(new Date(order.createdAt), "MMMM dd, yyyy HH:mm:ss")}
+                {format(new Date(order.pickup), "MMMM dd, yyyy HH:mm:ss")}
               </p>
               <Button
                 onClick={() =>

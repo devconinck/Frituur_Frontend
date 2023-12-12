@@ -47,17 +47,11 @@ export const saveOrders = async (Order: Order) => {
 
 export const createOrder = async ({ customerId }): Promise<Order> => {
   try {
-    const response = await axios.post(baseUrl, { customerId });
+    const pickup = new Date();
+    const response = await axios.post(baseUrl, { customerId, pickup });
     return response.data;
   } catch (error) {
     console.error("Error creating a new Order: ", error);
     throw error;
   }
-};
-
-export const deleteOrder = async (
-  url: string,
-  { arg: id }: { arg: number },
-) => {
-  await axios.delete(`${baseUrl}/${url}/${id}`);
 };

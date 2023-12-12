@@ -7,7 +7,7 @@ export default function CustomerCardForm() {
     <>
       <div>Here comes all the customer card settings and information</div>
       <div className=" h-72  w-96 rounded-lg  border-4 border-slate-500 bg-green-300 p-2">
-        <span>Frituur d'Aa</span>
+        <span>Frituur d`Aa</span>
         <div className="flex grow"></div>
         <span>Points: {points}</span>
         <div

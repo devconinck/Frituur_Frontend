@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CategoryNavigation from "../components/categoryList";
+import CategoryList from "../components/categoryList";
 import ProductList from "../components/ProductsListUser";
 import Cart from "../components/Cart";
 import { CartItem, Category } from "~/types";
@@ -7,13 +7,15 @@ import { Product } from "~/types";
 import useSWR from "swr";
 import { getAllProducts } from "~/api/products";
 import PrivateRoute from "~/components/PrivateRoute";
+import { Separator } from "~/components/ui/separator";
+import { useQuery } from "@tanstack/react-query";
 
 const OrderPage: React.FC = () => {
   const {
     data: products,
     isLoading,
     error,
-  } = useSWR("products", getAllProducts);
+  } = useQuery(["products"], getAllProducts);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     null,
   );
@@ -45,10 +47,11 @@ const OrderPage: React.FC = () => {
   return (
     <PrivateRoute>
       <div className="container mx-auto flex h-screen flex-col p-4 md:flex-row">
-        <div className="md:w-2/3 md:pr-4">
-          <h1 className="mb-4 text-2xl font-semibold">Webshop</h1>
+        <div className=" md:w-2/3 md:pr-4">
+          <h1 className=" mb-2 text-2xl font-semibold">Create your order</h1>
+          <Separator className="mb-4" />
 
-          <CategoryNavigation
+          <CategoryList
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
           />

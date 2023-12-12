@@ -12,6 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
+import Image from "next/image";
 
 interface AdminProductProps {
   product: Product;
@@ -36,9 +37,11 @@ const AdminProduct: React.FC<AdminProductProps> = ({
     <div key={product.id} className="">
       <div className=" items-center justify-center rounded-lg border p-4">
         <div className="mb-2 flex justify-between">
-          <img
+          <Image
             src={`/productImages/${product.url}`}
             alt={product.name}
+            height={80}
+            width={80}
             className="h-20 w-20 rounded-lg object-cover"
           />
         </div>
