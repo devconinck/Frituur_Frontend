@@ -65,10 +65,7 @@ const Cart: React.FC<CartProps> = ({ cart, removeFromCart }) => {
           <p className="mt-4 text-right text-lg font-bold">
             Total: ${totalPrice.toFixed(2)}
           </p>
-          <Button
-            onClick={handleCheckout}
-            className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
-          >
+          <Button onClick={handleCheckout} className="mt-4 rounded px-4 py-2 ">
             Checkout
           </Button>
         </>

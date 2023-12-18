@@ -24,9 +24,11 @@ export const getOneCategory = async (CategoryId: number): Promise<Category> => {
 };
 
 // Function to create a new Category
-export const createCategory = async (CategoryData: any) => {
+export const createCategory = async (name: string) => {
   try {
-    const response = await axios.post(baseUrl, CategoryData);
+    console.log(name);
+    const response = await axios.post(baseUrl, name);
+    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error("Error creating a new Category: ", error);

@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useAuth } from "~/contexts/auth.contexts";
 import Error from "~/components/Error";
+import * as api from "~/api/index";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,10 +14,13 @@ import {
 
 const PrivateRoute = ({ children }) => {
   const router = useRouter();
-  const { ready, isAuthed } = useAuth();
+  const { ready, isAuthed, token } = useAuth();
 
   const loginPath = `/login?redirect=${router.asPath}`;
   const registerPath = `/register?redirect=${router.asPath}`;
+
+  console.log("setting token", token);
+  api.setAuthToken(token);
 
   const handleLogin = () => {
     router.replace(loginPath);
@@ -26,7 +30,7 @@ const PrivateRoute = ({ children }) => {
     router.replace(registerPath);
   };
 
-  if (!ready) {
+  if (!ready || !token) {
     return (
       <div>
         <div>
@@ -53,7 +57,7 @@ const PrivateRoute = ({ children }) => {
             <AlertDialogDescription></AlertDialogDescription>
             <AlertDialogFooter>
               <AlertDialogAction className="" onClick={handleRegister}>
-                I don't have an account
+                I don`t have an account
               </AlertDialogAction>
               <AlertDialogAction onClick={handleLogin}>
                 Go to sign in
@@ -64,6 +68,8 @@ const PrivateRoute = ({ children }) => {
       </AlertDialog>
     );
   }
+
+  console.log("here is the token before rendering", token);
 
   return <>{children}</>;
 };

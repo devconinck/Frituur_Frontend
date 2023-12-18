@@ -8,11 +8,11 @@ import { format } from "date-fns";
 import { useAuth } from "~/contexts/auth.contexts";
 
 export default function OrdersForm() {
-  let userId;
+  let userId: string | null = null;
   if (typeof localStorage !== "undefined") {
     userId = localStorage.getItem("userId");
   }
-  const { data: orders = [] } = useSWR<Order[]>("/orders", () =>
+  const { data: orders = [] } = useSWR<Order[]>("orders", () =>
     getOrdersByUserId(userId),
   );
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
@@ -42,7 +42,7 @@ export default function OrdersForm() {
                     prevId === order.id ? null : order.id,
                   )
                 }
-                className="rounded bg-blue-500 px-3 py-1 text-white"
+                className="rounded px-3 py-1 "
               >
                 See Details
               </Button>

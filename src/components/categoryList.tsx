@@ -28,7 +28,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
             <Button
               key={category.id}
               variant={category === selectedCategory ? "default" : "ghost"}
-              className={`cursor-pointer  transition duration-150 hover:text-blue-400`}
+              className={`cursor-pointer  transition duration-150 `}
               onClick={() => setSelectedCategory(category)}
             >
               {category.name}

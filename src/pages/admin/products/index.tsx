@@ -19,16 +19,8 @@ const queryClient = new QueryClient();
 
 const AdminPage: React.FC = () => {
   const productsQuery = useQuery({
-    queryKey: ["products"],
-    queryFn: async () => await getAllProducts(),
-  });
-
-  const productsMutation = useMutation({
-    mutationKey: ["delete"],
-    mutationFn: async (id: number) => await deleteProduct(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["products"]);
-    },
+    queryKey: ["adminProducts"],
+    queryFn: getAllProducts,
   });
 
   const [currentProduct, setCurrentProduct] = useState({});
@@ -50,11 +42,7 @@ const AdminPage: React.FC = () => {
       />
       <Separator className="mb-5" />
 
-      <ProductListAdmin
-        products={products}
-        onEdit={setProductToUpdate}
-        onDelete={(id) => productsMutation.mutate(id)}
-      />
+      <ProductListAdmin products={products} onEdit={setProductToUpdate} />
     </div>
   );
 };

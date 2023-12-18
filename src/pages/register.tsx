@@ -5,46 +5,13 @@ import { useAuth } from "~/contexts/auth.contexts";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogAction,
-  AlertDialogHeader,
-  AlertDialogFooter,
-} from "~/components/ui/alert-dialog";
+import LabelInput from "~/components/LabelInput";
 
 interface FormData {
   name: string;
   email: string;
   password: string;
-}
-
-function LabelInput({ label, name, type, validationRules, ...rest }: any) {
-  const {
-    register,
-    formState: { errors, isSubmitting },
-  } = useFormContext();
-
-  const hasError = name in errors;
-
-  return (
-    <div className="mb-4">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
-        {label}
-      </label>
-      <input
-        {...register(name, validationRules)}
-        id={name}
-        type={type}
-        disabled={isSubmitting}
-        className="mt-1 w-full rounded-md border border-slate-600 p-2"
-        {...rest}
-      />
-      {hasError ? <div className="">{errors[name]}</div> : null}
-    </div>
-  );
+  passwordConfirm: string;
 }
 
 const validationRules = {
@@ -74,6 +41,7 @@ const Register: NextPage = () => {
       name: "",
       email: "",
       password: "",
+      passwordConfirm: "",
     },
   });
   const router = useRouter();
@@ -89,10 +57,12 @@ const Register: NextPage = () => {
 
   const handleRegister = useCallback(
     async (data: FormData) => {
+      console.log(data);
       const registered = await registerUser(
         data.name,
         data.email,
         data.password,
+        data.passwordConfirm,
       );
 
       if (registered) {
@@ -100,7 +70,7 @@ const Register: NextPage = () => {
         console.log("registered");
       }
     },
-    [registerUser],
+    [registerUser, router],
   );
 
   return (
@@ -133,6 +103,12 @@ const Register: NextPage = () => {
                 label="Password"
                 type="password"
                 name="password"
+                validationRules={validationRules.password}
+              />
+              <LabelInput
+                label="Confirm password"
+                type="password"
+                name="passwordConfirm"
                 validationRules={validationRules.password}
               />
             </div>

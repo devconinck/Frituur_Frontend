@@ -6,13 +6,15 @@ import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { format } from "date-fns";
 
-export default function OrdersFormAdmin() {
+export default function OrdersListAdmin() {
   const { data: orders = [] } = useSWR("orders", getAllOrders);
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
 
   return (
     <>
-      <div className="mb-4">Check all your orders here</div>
+      <h2 className="mb-2 mt-3 text-2xl font-semibold">
+        Check your orders here
+      </h2>
       <div>
         {orders?.map((order: Order) => {
           const orderTotal = order.items
@@ -38,7 +40,7 @@ export default function OrdersFormAdmin() {
                     prevId === order.id ? null : order.id,
                   )
                 }
-                className="rounded bg-blue-500 px-3 py-1 text-white"
+                className="rounded  px-3 py-1 "
               >
                 See Details
               </Button>

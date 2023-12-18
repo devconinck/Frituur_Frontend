@@ -8,7 +8,6 @@ import { Menu, Moon, ShoppingCart, Sun } from "lucide-react";
 import { ProfileButton } from "./profile-button";
 import ModeToggle from "./ModeToggle";
 import { useAuth } from "~/contexts/auth.contexts";
-//import ProfileButton from "./ui/ProfileButton";
 
 const Header = () => {
   const { isAuthed } = useAuth();

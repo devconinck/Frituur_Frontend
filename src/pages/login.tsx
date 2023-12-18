@@ -16,32 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
-
-function LabelInput({ label, name, type, validationRules, ...rest }) {
-  const {
-    register,
-    formState: { errors, isSubmitting },
-  } = useFormContext();
-
-  const hasError = name in errors;
-
-  return (
-    <div className="mb-4">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
-        {label}
-      </label>
-      <input
-        {...register(name, validationRules)}
-        id={name}
-        type={type}
-        disabled={isSubmitting}
-        className="mt-1 w-full rounded-md border border-slate-600 p-2"
-        {...rest}
-      />
-      {hasError ? <div className="">{errors[name]}</div> : null}
-    </div>
-  );
-}
+import LabelInput from "~/components/LabelInput";
 
 const validationRules = {
   email: {
@@ -73,10 +48,10 @@ export const Login: NextPage = () => {
 
   const handleRegister = useCallback(() => {
     router.replace("/register");
-  }, [redirect]);
+  }, [router]);
 
   const handleLogin = useCallback(
-    async ({ email, password }) => {
+    async ({ email, password }: { email: string; password: string }) => {
       const loggedIn = await login(email, password);
 
       const { redirect } = router.query;

@@ -21,14 +21,14 @@ export const getOneCustomer = async (CustomerId: number): Promise<Customer> => {
   }
 };
 
-export const saveCustomers = async (Customer) => {
-  if (!Customer) {
+export const saveCustomers = async (customer: Customer) => {
+  if (!customer) {
     // Handle the case where the Customer is undefined
     console.error("Customer is undefined");
     return;
   }
 
-  const { id, ...CustomerData } = Customer;
+  const { id, ...CustomerData } = customer;
   await axios({
     method: id ? "PUT" : "POST",
     url: id ? `${baseUrl}/${id}` : baseUrl,
@@ -46,8 +46,4 @@ export const createCustomer = async (
     console.error("Error creating a new Customer: ", error);
     throw error;
   }
-};
-
-export const deleteCustomer = async (url, { arg: id }) => {
-  await axios.delete(`${baseUrl}/${url}/${id}`);
 };

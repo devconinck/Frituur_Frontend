@@ -1,19 +1,15 @@
-import axiosRoot from "axios";
+import axios from "axios";
 import { Product } from "~/types";
 
 const baseUrl = `http://localhost:8080/products`;
 
-export const axios = axiosRoot.create({
-  baseURL: baseUrl,
-});
-
-export const setAuthToken = (token: string) => {
-  if (token) axios.defaults.headers["Authorization"] = `Bearer ${token}`;
-  else delete axios.defaults.headers["Authorization"];
-};
-
 export const getAllProducts = async (): Promise<Product[] | null> => {
+  const localStorage = window.localStorage;
+  const token = localStorage.getItem("jwtToken");
+  console.log("token", token);
+  axios.defaults.headers.common["authorization"] = `Bearer ${token}`;
   try {
+    console.log(axios.defaults.headers.common["authorization"]);
     return await axios.get(baseUrl).then((res) => res.data);
   } catch (error) {
     console.error("Error fetching all products: ", error);
@@ -30,7 +26,7 @@ export const getOneProduct = async (productId: number): Promise<Product> => {
   }
 };
 
-export const saveProducts = async ({ arg: product }) => {
+export const saveProducts = async ({ arg: product }: { arg: Product }) => {
   if (!product) {
     // Handle the case where the product is undefined
     console.error("Product is undefined");

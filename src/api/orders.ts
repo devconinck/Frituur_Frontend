@@ -45,7 +45,11 @@ export const saveOrders = async (Order: Order) => {
   });
 };
 
-export const createOrder = async ({ customerId }): Promise<Order> => {
+export const createOrder = async ({
+  customerId,
+}: {
+  customerId: number;
+}): Promise<Order> => {
   try {
     const pickup = new Date();
     const response = await axios.post(baseUrl, { customerId, pickup });

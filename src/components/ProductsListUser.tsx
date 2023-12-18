@@ -47,7 +47,7 @@ const ProductList: React.FC<ProductListProps> = ({
                   </p>
                 </div>
                 <Button
-                  className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+                  className="rounded px-4 py-2"
                   onClick={() => addToCart(product)}
                 >
                   Add to Cart

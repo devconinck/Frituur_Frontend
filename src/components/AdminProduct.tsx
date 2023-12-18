@@ -13,6 +13,8 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import Image from "next/image";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteProduct } from "~/api/products";
 
 interface AdminProductProps {
   product: Product;
@@ -25,9 +27,18 @@ const AdminProduct: React.FC<AdminProductProps> = ({
   onEdit,
   onDelete,
 }) => {
+  const queryClient = useQueryClient();
+  const { status, error, mutate } = useMutation({
+    mutationKey: ["deleteProduct"],
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      queryClient.refetchQueries(["adminProducts"]);
+      queryClient.invalidateQueries(["adminProducts"]);
+    },
+  });
   const handleDelete = useCallback(() => {
-    onDelete(product.id);
-  }, [product.id, onDelete]);
+    mutate(product.id);
+  }, [product.id, mutate]);
 
   const handleEdit = useCallback(() => {
     onEdit(product.id);
