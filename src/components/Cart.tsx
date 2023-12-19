@@ -24,7 +24,6 @@ const Cart: React.FC<CartProps> = ({ cart, removeFromCart }) => {
       return;
     }
 
-    console.log("Creating order for user", customerId);
     try {
       const response = await createOrder({ customerId });
 

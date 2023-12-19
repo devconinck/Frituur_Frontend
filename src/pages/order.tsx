@@ -12,7 +12,6 @@ import { useQuery } from "@tanstack/react-query";
 
 const OrderPageContent: React.FC = () => {
   const localStorage = window.localStorage;
-  console.log("localStorage", localStorage.getItem("jwtToken"));
   const {
     data: products,
     isLoading,

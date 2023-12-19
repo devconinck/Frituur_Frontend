@@ -19,11 +19,13 @@ export function ProfileButton() {
   const { error, loading, logout } = useAuth();
   const router = useRouter();
 
+  const localStorage = typeof window !== "undefined" && window.localStorage;
+
   const handleLogout = useCallback(async () => {
     logout();
 
-    router.push("/login");
-  }, [logout]);
+    router.push("/");
+  }, [logout, router]);
 
   return (
     <DropdownMenu>

@@ -1,21 +1,11 @@
 import { NextPage } from "next";
-import { redirect } from "next/navigation";
 import { useCallback } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { useAuth } from "~/contexts/auth.contexts";
 import Error from "~/components/Error";
 import { Button } from "~/components/ui/button";
 import { useRouter } from "next/router";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTrigger,
-} from "~/components/ui/alert-dialog";
+
 import LabelInput from "~/components/LabelInput";
 
 const validationRules = {
@@ -36,7 +26,11 @@ const validationRules = {
 };
 
 export const Login: NextPage = () => {
-  const { error, loading, login } = useAuth();
+  const { error, loading, login } = useAuth() as {
+    error: any;
+    loading: boolean;
+    login: (email: string, password: string) => Promise<boolean>;
+  };
   const methods = useForm({
     defaultValues: {
       email: "Quinten@gmail.com",
@@ -47,7 +41,7 @@ export const Login: NextPage = () => {
   const { handleSubmit } = methods;
 
   const handleRegister = useCallback(() => {
-    router.replace("/register");
+    router.push("/register");
   }, [router]);
 
   const handleLogin = useCallback(
@@ -62,7 +56,7 @@ export const Login: NextPage = () => {
         );
       }
     },
-    [router.push, login],
+    [login, router],
   );
   return (
     <div>
@@ -76,6 +70,7 @@ export const Login: NextPage = () => {
               label="email"
               type="text"
               name="email"
+              //@ts-ignore
               placeholder="your@email.com"
               validationRules={validationRules.email}
             />
@@ -92,7 +87,7 @@ export const Login: NextPage = () => {
                 className="mx-4"
                 onClick={handleRegister}
               >
-                I don't have an account
+                I don`t have an account
               </Button>
               <Button type="submit" disabled={loading}>
                 Sign in

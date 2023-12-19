@@ -7,72 +7,68 @@ import {
   useContext,
   ReactNode,
 } from "react";
-import useSWRMutation from "swr/mutation";
 import * as api from "../api/index";
-import { useRouter } from "next/router";
-import { set } from "cypress/types/lodash";
+import { useMutation } from "@tanstack/react-query";
 
 const JWT_TOKEN_KEY = "jwtToken";
 const USER_ID_KEY = "userId";
-const ROLE_KEY = "role";
+//@ts-ignore
 const AuthContext = createContext();
+
+export type User = {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+};
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [token, setToken] = useState("");
-  const [userId, setUserId] = useState(null);
-  const [role, setRole] = useState("");
+  const [token, setToken] = useState(
+    typeof window !== "undefined" ? localStorage.getItem(JWT_TOKEN_KEY) : "",
+  );
+  const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
   const [isAuthed, setIsAuthed] = useState(false);
 
-  const router = useRouter();
-
   useEffect(() => {
-    if (typeof localStorage !== "undefined") {
-      const storedToken = localStorage.getItem(JWT_TOKEN_KEY);
-      console.log("storedToken", storedToken);
-      if (storedToken) {
-        setToken(storedToken);
-        console.log("setting token", storedToken);
-        api.setAuthToken(storedToken);
-        console.log("setting AUTHtoken", storedToken);
-        setIsAuthed(true);
-        setReady(true);
-      }
-      setReady(true);
-    } else {
-      console.error("localStorage is not available.");
-    }
-  }, []);
+    api.setAuthToken(token!!);
+    setIsAuthed(Boolean(token));
+    setReady(true);
+  }, [token]);
 
-  const {
-    isMutating: loading,
-    error,
-    trigger: doLogin,
-  } = useSWRMutation("login", api.post);
+  const setSession = useCallback(
+    (
+      token: string,
+      user: { id: number; name: string; email: string; role: string },
+    ) => {
+      setToken(token);
+      setUser(user);
+
+      localStorage.setItem(JWT_TOKEN_KEY, token);
+      localStorage.setItem(USER_ID_KEY, user.id.toString());
+    },
+    [],
+  );
+
+  const loginMutation = useMutation(
+    (loginData: { email: string; password: string }) =>
+      api.post("login", loginData),
+  );
 
   const login = useCallback(
     async (email: string, password: string) => {
       try {
-        const { accessToken, id, role } = await doLogin({
+        console.log("login");
+        const { accessToken, user } = await loginMutation.mutateAsync({
           email,
           password,
         });
 
-        setToken(accessToken);
-        setUserId(id);
-        setRole(role);
-
-        localStorage.setItem(USER_ID_KEY, id);
-
-        localStorage.setItem(JWT_TOKEN_KEY, accessToken);
-
-        api.setAuthToken(accessToken);
-
-        localStorage.setItem(ROLE_KEY, role);
+        setSession(accessToken, user);
 
         return true;
       } catch (error) {
@@ -80,71 +76,71 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         return false;
       }
     },
-    [doLogin],
+    [loginMutation, setSession],
   );
 
-  const isAdmin = useMemo(() => role === "admin", [role]);
-
-  const logout = useCallback(() => {
-    setToken("");
-    setUserId(null);
-    setRole("");
-
-    localStorage.removeItem(JWT_TOKEN_KEY);
-    localStorage.removeItem(USER_ID_KEY);
-    localStorage.removeItem(ROLE_KEY);
-  }, []);
-
-  const {
-    isMutating: registerLoading,
-    error: registerError,
-    trigger: doRegister,
-  } = useSWRMutation("register", api.post);
+  const RegisterMutation = useMutation(
+    (registerData: {
+      name: string;
+      email: string;
+      password: string;
+      passwordConfirm: string;
+    }) => api.post("register", registerData),
+  );
 
   const register = useCallback(
-    async (name, email, password, passwordConfirm) => {
+    async (
+      name: string,
+      email: string,
+      password: string,
+      passwordConfirm: string,
+    ) => {
       try {
-        const response = await doRegister({
+        const { accessToken, user } = await RegisterMutation.mutateAsync({
           name,
           email,
           password,
           passwordConfirm,
         });
-        return response;
+        setSession(accessToken, user);
+        return true;
       } catch (error) {
         console.error(error);
         return false;
       }
     },
-    [doRegister],
+    [RegisterMutation, setSession],
   );
+
+  const logout = useCallback(() => {
+    setToken(null);
+    setUser(null);
+
+    localStorage.removeItem(JWT_TOKEN_KEY);
+    localStorage.removeItem(USER_ID_KEY);
+  }, []);
+
   const value = useMemo(
     () => ({
       token,
-      userId,
-      role,
-      error,
+      user,
+      error: loginMutation.error || RegisterMutation.error,
       ready,
-      loading,
+      loading: loginMutation.isLoading || RegisterMutation.isLoading,
       isAuthed,
-      isAdmin,
-      registerLoading,
-      registerError,
       login,
       logout,
       register,
     }),
     [
       token,
-      userId,
-      role,
-      error,
+      user,
+      loginMutation.error,
+      RegisterMutation.error,
       ready,
-      loading,
+      loginMutation.isLoading,
+      RegisterMutation.isLoading,
       isAuthed,
-      isAdmin,
-      registerLoading,
-      registerError,
       login,
       logout,
       register,

@@ -5,11 +5,11 @@ import { Button } from "~/components/ui/button";
 import { saveProducts } from "~/api/products";
 import useSWR from "swr";
 import { getAllCategories } from "~/api/categories";
-import { mutate } from "swr";
 import LabelInput from "./LabelInput";
 import { QueryClient, useMutation } from "@tanstack/react-query";
+import { UseFormReturn } from "react-hook-form";
 interface AddOrEditProps {
-  currentProduct: Product;
+  currentProduct: {} | Product;
   setProductToUpdate: (id: number) => void;
 }
 
@@ -36,10 +36,14 @@ const validationRules = {
     },
   },
   url: {
-    /* min: {
+    min: {
       value: 3,
       message: "URL must be at least 3 characters long",
-    }, */
+    },
+    max: {
+      value: 50,
+      message: "URL must be at most 50 characters long",
+    },
   },
   categoryId: {
     required: "Category ID is required",
@@ -57,7 +61,13 @@ function CategoriesSelect({
   name: string;
   categories: Category[];
 }) {
-  const { register, errors, isSubmitting } = useFormContext();
+  interface UseFormReturnWithErrors extends UseFormReturn {
+    errors: Record<string, any>;
+    isSubmitting: boolean;
+  }
+
+  const { register, errors, isSubmitting } =
+    useFormContext() as UseFormReturnWithErrors;
 
   const hasError = name in errors;
 
@@ -100,7 +110,7 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
     reset,
     setValue,
     formState: { errors },
-    isSubmitting,
+    formState: { isSubmitting },
   } = useForm();
 
   const queryClient = new QueryClient();
@@ -115,9 +125,9 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
   });
 
   const onSubmit = useCallback(
-    async (data) => {
+    async (data: Record<string, any>) => {
       const { name, description, price, url, categoryId } = data;
-      const id = currentProduct.id || null;
+      const id = (currentProduct as Product)?.id;
 
       mutate({
         arg: {
@@ -130,28 +140,8 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
         },
       });
     },
-    [reset, saveProducts, currentProduct],
+    [mutate, currentProduct],
   );
-
-  /* await saveProducts({
-        arg: {
-          id,
-          name,
-          description,
-          price,
-          url,
-          categoryId: Number(categoryId),
-        },
-      });
-      if (id) {
-        mutate(`localhost:8080/products/${id}`);
-      } else {
-        mutate("localhost:8080/products");
-      } 
-      setProductToUpdate(null);
-    },
-    [reset, saveProducts, currentProduct],
-  );*/
 
   useEffect(() => {
     if (
@@ -159,11 +149,11 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
       (Object.keys(currentProduct).length !== 0 ||
         currentProduct.constructor !== Object)
     ) {
-      setValue("name", currentProduct.name);
-      setValue("description", currentProduct.description);
-      setValue("price", currentProduct.price);
-      setValue("url", currentProduct.url);
-      setValue("categoryId", currentProduct.categoryId);
+      setValue("name", (currentProduct as Product)?.name);
+      setValue("description", (currentProduct as Product)?.description);
+      setValue("price", (currentProduct as Product)?.price);
+      setValue("url", (currentProduct as Product)?.url);
+      setValue("categoryId", (currentProduct as Product)?.categoryId);
     } else {
       reset();
     }
@@ -175,6 +165,7 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
 
       <FormProvider
         handleSubmit={handleSubmit}
+        //@ts-ignore
         errors={errors}
         register={register}
         isSubmitting={isSubmitting}
@@ -220,14 +211,19 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
             <CategoriesSelect name="categoryId" categories={categories} />
           </div>
 
-          <div className="clearfix">
-            <div className="btn-group float-end">
+          <div className="">
+            <div className="flex items-start gap-4">
               <Button
                 type="submit"
                 disabled={isSubmitting}
                 variant={"destructive"}
               >
-                {currentProduct?.id ? "Save product" : "Add product"}
+                {(currentProduct as Product)?.id
+                  ? "Save product"
+                  : "Add product"}
+              </Button>
+              <Button type="reset" variant={"secondary"}>
+                Reset
               </Button>
             </div>
           </div>

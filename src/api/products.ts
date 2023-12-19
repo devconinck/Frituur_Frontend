@@ -1,56 +1,41 @@
 import axios from "axios";
+import Error, { ErrorProps } from "next/error";
 import { Product } from "~/types";
 
 const baseUrl = `http://localhost:8080/products`;
 
-export const getAllProducts = async (): Promise<Product[] | null> => {
+export const getAllProducts = async (): Promise<Product[]> => {
   const localStorage = window.localStorage;
   const token = localStorage.getItem("jwtToken");
-  console.log("token", token);
   axios.defaults.headers.common["authorization"] = `Bearer ${token}`;
   try {
-    console.log(axios.defaults.headers.common["authorization"]);
     return await axios.get(baseUrl).then((res) => res.data);
   } catch (error) {
-    console.error("Error fetching all products: ", error);
-    throw error;
-  }
-};
-
-export const getOneProduct = async (productId: number): Promise<Product> => {
-  try {
-    return await axios.get(`${baseUrl}/${productId}`).then((res) => res.data);
-  } catch (error) {
-    console.error("Error fetching product by ID: ", error);
-    throw error;
+    throw new Error(error as ErrorProps);
   }
 };
 
 export const saveProducts = async ({ arg: product }: { arg: Product }) => {
   if (!product) {
-    // Handle the case where the product is undefined
-    console.error("Product is undefined");
-    return;
+    throw new Error({ message: "Product is undefined", statusCode: 400 });
   }
 
   const { id, ...productData } = product;
-  await axios({
-    method: id ? "PUT" : "POST",
-    url: id ? `${baseUrl}/${id}` : baseUrl,
-    data: productData,
-  });
-};
-
-export const createProduct = async (productData: Product): Promise<Product> => {
   try {
-    const response = await axios.post(baseUrl, productData);
-    return response.data;
+    await axios({
+      method: id ? "PUT" : "POST",
+      url: id ? `${baseUrl}/${id}` : baseUrl,
+      data: productData,
+    });
   } catch (error) {
-    console.error("Error creating a new product: ", error);
-    throw error;
+    throw new Error(error as ErrorProps);
   }
 };
 
 export const deleteProduct = async (id: number) => {
-  await axios.delete(`${baseUrl}/${id}`);
+  try {
+    await axios.delete(`${baseUrl}/${id}`);
+  } catch (error) {
+    throw new Error(error as ErrorProps);
+  }
 };

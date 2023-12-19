@@ -1,37 +1,33 @@
-import React, { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
 import AddOrEdit from "../../../components/AddOrEdit";
-import { Product } from "../../../types";
-import AdminLayout from "../layout";
 import { Separator } from "~/components/ui/separator";
 import ProductListAdmin from "../../../components/ProductsListAdmin";
-import useSWR from "swr";
 import { getAllProducts } from "~/api/products";
-import useSWRMutation from "swr/mutation";
-import { deleteProduct } from "~/api/products";
-import { set } from "date-fns";
 import Loader from "~/components/Loader";
-import AsyncData from "~/components/AsyncData";
-import { useQuery, useMutation, QueryClient } from "@tanstack/react-query";
-import { id } from "date-fns/locale";
-
-const queryClient = new QueryClient();
+import { useQuery } from "@tanstack/react-query";
+import Error from "~/components/Error";
+import { Product } from "~/types";
 
 const AdminPage: React.FC = () => {
-  const productsQuery = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["adminProducts"],
     queryFn: getAllProducts,
   });
 
   const [currentProduct, setCurrentProduct] = useState({});
 
-  if (productsQuery.isLoading) return <Loader />;
-  if (productsQuery.error) return <p>Error</p>;
+  if (isLoading) return <Loader />;
+  //@ts-ignore
+  if (error) return <Error error={error} />;
 
-  const products = productsQuery.data;
+  const products = data;
 
-  const setProductToUpdate = (id: number) => {
-    setCurrentProduct(id === null ? {} : products?.find((t) => t.id === id));
+  const setProductToUpdate = (id: number): void => {
+    setCurrentProduct(
+      id === null
+        ? {}
+        : products?.find((product: Product) => product.id === id) ?? {},
+    );
   };
 
   return (

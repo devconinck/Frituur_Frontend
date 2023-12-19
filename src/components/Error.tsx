@@ -1,17 +1,15 @@
 import { isAxiosError } from "axios";
 
-import { AxiosError } from "axios";
-
 interface ErrorProps {
-  error: Error | AxiosError;
+  error: Error;
 }
 
 export default function Error({ error }: ErrorProps) {
   if (isAxiosError(error)) {
     return (
-      <div className="alert alert-danger">
-        <h4 className="alert-heading">Oops, something went wrong</h4>
-        <p>
+      <div className="flex flex-col items-center">
+        <h4 className="text-xl text-red-500">Oops, something went wrong</h4>
+        <p className="text-lg text-slate-500">
           {error.response?.data?.message || error.message}
           {error.response?.data?.details && (
             <>
@@ -27,8 +25,8 @@ export default function Error({ error }: ErrorProps) {
 
   if (error) {
     return (
-      <div className="alert alert-danger">
-        <h4 className="alert-heading">An unexpected error occured</h4>
+      <div className="flex flex-col items-center text-xl text-red-500">
+        <h4 className="text-xl text-red-500">An unexpected error occured</h4>
         {error.message || JSON.stringify(error)}
       </div>
     );

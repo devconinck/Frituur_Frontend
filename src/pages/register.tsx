@@ -1,4 +1,3 @@
-// Register.tsx
 import { NextPage } from "next";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { useAuth } from "~/contexts/auth.contexts";
@@ -35,7 +34,16 @@ const validationRules = {
 };
 
 const Register: NextPage = () => {
-  const { registerError, registerLoading, register: registerUser } = useAuth();
+  const { error, loading, register } = useAuth() as {
+    error: any;
+    loading: boolean;
+    register: (
+      name: string,
+      email: string,
+      password: string,
+      passwordConfirm: string,
+    ) => Promise<boolean>;
+  };
   const methods = useForm<FormData>({
     defaultValues: {
       name: "",
@@ -45,11 +53,7 @@ const Register: NextPage = () => {
     },
   });
   const router = useRouter();
-  const { handleSubmit, reset } = methods;
-
-  const handleCancel = () => {
-    reset();
-  };
+  const { handleSubmit } = methods;
 
   const handleLogin = () => {
     router.push("/login");
@@ -57,8 +61,7 @@ const Register: NextPage = () => {
 
   const handleRegister = useCallback(
     async (data: FormData) => {
-      console.log(data);
-      const registered = await registerUser(
+      const registered = await register(
         data.name,
         data.email,
         data.password,
@@ -66,11 +69,10 @@ const Register: NextPage = () => {
       );
 
       if (registered) {
-        router.push("/login");
-        console.log("registered");
+        router.push("/");
       }
     },
-    [registerUser, router],
+    [register, router],
   );
 
   return (
@@ -87,6 +89,7 @@ const Register: NextPage = () => {
                 label="Name"
                 type="text"
                 name="name"
+                //@ts-ignore
                 placeholder="Joske Vermeulen"
                 validationRules={validationRules.name}
               />
@@ -95,6 +98,7 @@ const Register: NextPage = () => {
                 label="Email"
                 type="text"
                 name="email"
+                //@ts-ignore
                 placeholder="your@email.com"
                 validationRules={validationRules.email}
               />
@@ -118,7 +122,7 @@ const Register: NextPage = () => {
                   I already have an account
                 </Button>
 
-                <Button type="submit" disabled={registerLoading}>
+                <Button type="submit" disabled={loading}>
                   Register
                 </Button>
               </div>

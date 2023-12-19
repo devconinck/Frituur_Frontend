@@ -1,4 +1,6 @@
 import axiosRoot from "axios";
+import { ca } from "date-fns/locale";
+import Error, { ErrorProps } from "next/error";
 
 const baseUrl = `http://localhost:8080`;
 
@@ -7,12 +9,15 @@ export const axios = axiosRoot.create({
 });
 
 export const setAuthToken = (token: string) => {
-  console.log("setting token", token);
   if (token) axios.defaults.headers.common["authorization"] = `Bearer ${token}`;
   else delete axios.defaults.headers.common["authorization"];
 };
-export const post = async (url: string, { arg }: any) => {
-  const { data } = await axios.post(url, arg);
+export const post = async (url: string, arg: any): Promise<any> => {
+  try {
+    const { data } = await axios.post(url, arg);
 
-  return data;
+    return data;
+  } catch (error) {
+    throw new Error(error as ErrorProps);
+  }
 };

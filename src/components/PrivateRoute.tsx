@@ -19,7 +19,6 @@ const PrivateRoute = ({ children }) => {
   const loginPath = `/login?redirect=${router.asPath}`;
   const registerPath = `/register?redirect=${router.asPath}`;
 
-  console.log("setting token", token);
   api.setAuthToken(token);
 
   const handleLogin = () => {
@@ -68,8 +67,6 @@ const PrivateRoute = ({ children }) => {
       </AlertDialog>
     );
   }
-
-  console.log("here is the token before rendering", token);
 
   return <>{children}</>;
 };

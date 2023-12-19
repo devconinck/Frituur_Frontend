@@ -19,14 +19,9 @@ import { deleteProduct } from "~/api/products";
 interface AdminProductProps {
   product: Product;
   onEdit: (id: number) => void;
-  onDelete: (id: number) => void;
 }
 
-const AdminProduct: React.FC<AdminProductProps> = ({
-  product,
-  onEdit,
-  onDelete,
-}) => {
+const AdminProduct: React.FC<AdminProductProps> = ({ product, onEdit }) => {
   const queryClient = useQueryClient();
   const { status, error, mutate } = useMutation({
     mutationKey: ["deleteProduct"],
