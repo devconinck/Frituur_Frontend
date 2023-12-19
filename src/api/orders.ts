@@ -1,9 +1,9 @@
-import axios from "axios";
+import { axios } from "./index";
 import { request } from "https";
 import Error, { ErrorProps } from "next/error";
 import { Order } from "~/types";
 
-const baseUrl = `http://localhost:8080/orders`;
+const baseUrl = `/orders`;
 
 export const getAllOrders = async (): Promise<Order[]> => {
   try {
@@ -16,9 +16,6 @@ export const getAllOrders = async (): Promise<Order[]> => {
 
 export const getOrdersByUserId = async (userId: number): Promise<Order[]> => {
   try {
-    /*   const localStorage = window.localStorage;
-    const token = localStorage.getItem("jwtToken");
-    axios.defaults.headers.common["authorization"] = `Bearer ${token}`; */
     return await axios.get(`${baseUrl}/user/${userId}`).then((res) => res.data);
   } catch (error) {
     throw new Error(error as ErrorProps);

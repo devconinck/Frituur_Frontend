@@ -62,7 +62,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const login = useCallback(
     async (email: string, password: string) => {
       try {
-        console.log("login");
         const { accessToken, user } = await loginMutation.mutateAsync({
           email,
           password,

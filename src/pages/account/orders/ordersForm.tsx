@@ -10,7 +10,6 @@ import { User, useAuth } from "~/contexts/auth.contexts";
 export default function OrdersForm() {
   let userId: string | null = null;
   const { user } = useAuth() as { user: User };
-  console.log(user);
   if (typeof localStorage !== "undefined") {
     userId = localStorage.getItem("userId");
   }

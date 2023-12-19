@@ -9,8 +9,9 @@ export const axios = axiosRoot.create({
 });
 
 export const setAuthToken = (token: string) => {
-  if (token) axios.defaults.headers.common["authorization"] = `Bearer ${token}`;
-  else delete axios.defaults.headers.common["authorization"];
+  if (token) {
+    axios.defaults.headers["Authorization"] = `Bearer ${token}`;
+  } else delete axios.defaults.headers.common["Authorization"];
 };
 export const post = async (url: string, arg: any): Promise<any> => {
   try {

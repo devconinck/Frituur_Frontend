@@ -1,8 +1,8 @@
-import axios from "axios";
+import { axios } from "./index";
 import Error, { ErrorProps } from "next/error";
 import { Category } from "~/types";
 
-const baseUrl = `http://localhost:8080/categories`;
+const baseUrl = `/categories`;
 
 export const getAllCategories = async (): Promise<Category[]> => {
   try {
