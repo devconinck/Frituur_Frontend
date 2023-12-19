@@ -14,7 +14,12 @@ export default function LabelInput({
   validationRules,
   ...rest
 }: LabelInputProps) {
-  const { register, isSubmitting, errors } = useFormContext();
+  const {
+    register,
+    formState: { errors, isSubmitting },
+  } = useFormContext();
+
+  const hasError = name in errors;
 
   return (
     <div className="mb-4">
@@ -25,11 +30,15 @@ export default function LabelInput({
         {...register(name, validationRules)}
         id={name}
         type={type}
-        disabled={isSubmitting}
         autoComplete="off"
         className="mt-1 w-full rounded-md border border-slate-600 p-2"
         {...rest}
       />
+      {hasError ? (
+        <div>
+          <p className="mt-1 text-xs text-red-500">an error happened</p>
+        </div>
+      ) : null}
     </div>
   );
 }

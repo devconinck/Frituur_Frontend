@@ -1,7 +1,7 @@
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { Category } from "../types";
 import LabelInput from "./LabelInput";
-import { FormProvider, useForm } from "react-hook-form";
+import { FieldValues, FormProvider, useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { Trash2 } from "lucide-react";
 import {
@@ -36,16 +36,15 @@ export const CategoriesListAdmin: React.FC<CategoriesListAdminProps> = ({
   onAdd,
   onDelete,
 }) => {
+  const methods = useForm();
   const {
     handleSubmit,
-    register,
     formState: { errors },
-  } = useForm();
+  } = methods;
 
   const handleAdd = useCallback(
-    async (data) => {
-      const { name }: string = data;
-      await onAdd(name);
+    async (data: FieldValues) => {
+      onAdd(data.name);
     },
     [onAdd],
   );
@@ -87,18 +86,13 @@ export const CategoriesListAdmin: React.FC<CategoriesListAdminProps> = ({
           </li>
         ))}
       </ul>
-      <FormProvider
-        handleSubmit={handleSubmit}
-        register={register}
-        errors={errors}
-      >
+      <FormProvider {...methods}>
         <form onSubmit={handleSubmit(handleAdd)} className="mb-4">
           <LabelInput
             label="Category name"
             name="name"
             type="name"
             validationRules={validationRules.name}
-            className="mt-1 w-full rounded-md border border-slate-600 p-2"
           />
           <Button
             type="submit"

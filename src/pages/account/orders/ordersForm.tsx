@@ -25,6 +25,7 @@ export default function OrdersForm() {
         {orders?.map((order) => {
           const orderTotal = order.items
             ?.reduce(
+              //@ts-ignore
               (total, item) => total + item.product.price * item.quantity,
               0,
             )
@@ -34,8 +35,11 @@ export default function OrdersForm() {
             <div key={order.id} className="m-3 rounded border p-3 shadow-md">
               <p className="mb-2">Total Price: {orderTotal}</p>
               <p className="mb-2">
-                Order Date:{" "}
-                {format(new Date(order.pickup), "MMMM dd, yyyy HH:mm:ss")}
+                Order Date:
+                {
+                  //@ts-ignore
+                  format(new Date(order.pickup), "MMMM dd, yyyy HH:mm:ss")
+                }
               </p>
               <Button
                 onClick={() =>
@@ -50,9 +54,23 @@ export default function OrdersForm() {
               {expandedOrderId === order.id && (
                 <div className="mt-3">
                   {order.items?.map((item) => (
+                    //@ts-ignore
                     <div key={item.product.id} className="mt-2 border p-2">
-                      <p className="mb-1">Item: {item.product.name}</p>
-                      <p>Price: {item.product.price}</p>
+                      <p className="mb-1">
+                        Item:{" "}
+                        {
+                          //@ts-ignore
+
+                          item.product.name
+                        }
+                      </p>
+                      <p>
+                        Price:{" "}
+                        {
+                          //@ts-ignore
+                          item.product.price
+                        }
+                      </p>
                       <p>Quantity: {item.quantity}</p>
                     </div>
                   ))}

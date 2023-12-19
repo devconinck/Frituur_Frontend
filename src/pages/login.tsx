@@ -7,6 +7,7 @@ import { Button } from "~/components/ui/button";
 import { useRouter } from "next/router";
 
 import LabelInput from "~/components/LabelInput";
+import { isAxiosError } from "axios";
 
 const validationRules = {
   email: {
@@ -27,7 +28,7 @@ const validationRules = {
 
 export const Login: NextPage = () => {
   const { error, loading, login } = useAuth() as {
-    error: any;
+    error: typeof isAxiosError;
     loading: boolean;
     login: (email: string, password: string) => Promise<boolean>;
   };
@@ -65,7 +66,6 @@ export const Login: NextPage = () => {
           <form className="flex flex-col" onSubmit={handleSubmit(handleLogin)}>
             <h1 className="text-2xl font-bold">Sign in</h1>
             <Error error={error} />
-
             <LabelInput
               label="email"
               type="text"

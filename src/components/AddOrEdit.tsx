@@ -8,6 +8,7 @@ import { getAllCategories } from "~/api/categories";
 import LabelInput from "./LabelInput";
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import { UseFormReturn } from "react-hook-form";
+import Error from "./Error";
 interface AddOrEditProps {
   currentProduct: {} | Product;
   setProductToUpdate: (id: number) => void;
@@ -66,8 +67,10 @@ function CategoriesSelect({
     isSubmitting: boolean;
   }
 
-  const { register, errors, isSubmitting } =
-    useFormContext() as UseFormReturnWithErrors;
+  const {
+    register,
+    formState: { errors, isSubmitting },
+  } = useFormContext() as UseFormReturnWithErrors;
 
   const hasError = name in errors;
 
@@ -92,7 +95,7 @@ function CategoriesSelect({
         ))}
       </select>
       {hasError ? (
-        <div className="mt-1 text-sm text-red-600">{errors[name]}</div>
+        <div className="mt-1 text-sm text-red-600">{String(errors[name])}</div>
       ) : null}
     </div>
   );
@@ -104,14 +107,14 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
 }) => {
   const { data: categories = [] } = useSWR("categories", getAllCategories);
 
+  const methods = useForm();
+
   const {
-    register,
     handleSubmit,
     reset,
     setValue,
-    formState: { errors },
-    formState: { isSubmitting },
-  } = useForm();
+    formState: { errors, isSubmitting },
+  } = methods;
 
   const queryClient = new QueryClient();
 
@@ -162,14 +165,9 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
   return (
     <>
       <h2 className="mb-2 mt-3 text-2xl font-semibold">Add products</h2>
-
-      <FormProvider
-        handleSubmit={handleSubmit}
-        //@ts-ignore
-        errors={errors}
-        register={register}
-        isSubmitting={isSubmitting}
-      >
+      {/*@ts-ignore*/}
+      <Error error={error} />
+      <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className="mb-5">
           <div className="mb-3">
             <LabelInput
