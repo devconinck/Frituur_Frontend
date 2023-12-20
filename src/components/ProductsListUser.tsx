@@ -22,7 +22,7 @@ const ProductList: React.FC<ProductListProps> = ({
           : "All Products"}
       </h2>
       <ScrollArea className="h-96 max-h-[500px] rounded-lg border p-2">
-        <ul>
+        <ul data-cy="products">
           {products
             .filter(
               (product) =>

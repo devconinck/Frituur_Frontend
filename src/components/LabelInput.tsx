@@ -35,8 +35,10 @@ export default function LabelInput({
         {...rest}
       />
       {hasError ? (
-        <div>
-          <p className="mt-1 text-xs text-red-500">an error happened</p>
+        <div data-cy="error">
+          <p className="mt-1 text-xs text-red-500">
+            {errors[name]?.message?.toString()}
+          </p>
         </div>
       ) : null}
     </div>

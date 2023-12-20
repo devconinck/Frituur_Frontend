@@ -1,6 +1,4 @@
-import { get } from "http";
 import Image from "next/image";
-import useSWR from "swr";
 
 export default function CustomerCardForm() {
   return (

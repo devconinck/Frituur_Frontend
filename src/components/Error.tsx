@@ -5,10 +5,16 @@ interface ErrorProps {
 }
 
 export default function Error({ error }: ErrorProps) {
-  return (
-    <div className="flex flex-col items-center text-xl text-red-500">
-      <h4 className="text-xl text-red-500">An unexpected error occured</h4>
-      <p className="text-xs">{error?.response?.data.message}</p>
-    </div>
-  );
+  if (isAxiosError(error)) {
+    return (
+      <div
+        data-cy="error"
+        className="flex flex-col items-center text-xl text-red-500"
+      >
+        <p className="text-xs">{error.response?.data.message}</p>
+      </div>
+    );
+  } else {
+    return null;
+  }
 }

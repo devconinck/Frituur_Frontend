@@ -1,14 +1,25 @@
-import useSWR from "swr";
 import { getAllOrders } from "~/api/orders";
 import { Order } from "~/types";
 
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { format } from "date-fns";
+import { useQuery } from "@tanstack/react-query";
+import Loader from "./Loader";
+import Error from "./Error";
 
 export default function OrdersListAdmin() {
-  const { data: orders = [] } = useSWR("orders", getAllOrders);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["orders"],
+    queryFn: getAllOrders,
+  });
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
+
+  if (isLoading) return <Loader />;
+  //@ts-ignore
+  if (error) return <Error error={error} />;
+
+  const orders = data!!;
 
   return (
     <>

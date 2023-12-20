@@ -19,6 +19,6 @@ export const post = async (url: string, arg: any): Promise<any> => {
 
     return data;
   } catch (error) {
-    throw new Error(error as ErrorProps);
+    throw error;
   }
 };

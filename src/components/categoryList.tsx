@@ -2,8 +2,10 @@ import React from "react";
 import { Category } from "~/types";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { Button } from "./ui/button";
-import useSWR from "swr";
 import { getAllCategories } from "~/api/categories";
+import { useQuery } from "@tanstack/react-query";
+import Loader from "./Loader";
+import Error from "./Error";
 
 interface CategoryListProps {
   selectedCategory: Category | null;
@@ -14,11 +16,17 @@ const CategoryList: React.FC<CategoryListProps> = ({
   selectedCategory,
   setSelectedCategory,
 }) => {
-  const {
-    data: categories,
-    isLoading,
-    error,
-  } = useSWR("categories", getAllCategories);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["categories"],
+    queryFn: getAllCategories,
+  });
+
+  if (isLoading) return <Loader />;
+  //@ts-ignore
+  if (error) return <Error error={data.error} />;
+
+  const categories = data;
+
   return (
     <div className="mb-6">
       <h2 className="mb-2 text-xl font-semibold">Categories</h2>
@@ -30,6 +38,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
               variant={category === selectedCategory ? "default" : "ghost"}
               className={`cursor-pointer  transition duration-150 `}
               onClick={() => setSelectedCategory(category)}
+              data-cy={`category-${category.name}`}
             >
               {category.name}
             </Button>

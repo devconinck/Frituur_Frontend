@@ -8,7 +8,7 @@ export const getAllProducts = async (): Promise<Product[]> => {
   try {
     return await axios.get(baseUrl).then((res) => res.data);
   } catch (error) {
-    throw new Error(error as ErrorProps);
+    throw error;
   }
 };
 
@@ -25,7 +25,7 @@ export const saveProducts = async ({ arg: product }: { arg: Product }) => {
       data: productData,
     });
   } catch (error) {
-    throw new Error(error as ErrorProps);
+    throw error;
   }
 };
 
@@ -33,6 +33,6 @@ export const deleteProduct = async (id: number) => {
   try {
     await axios.delete(`${baseUrl}/${id}`);
   } catch (error) {
-    throw new Error(error as ErrorProps);
+    throw error;
   }
 };

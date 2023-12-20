@@ -1,11 +1,12 @@
 import { getOrdersByUserId } from "~/api/orders";
-import useSWR from "swr";
-import { Order } from "~/types";
 
-import { use, useState } from "react";
+import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { format } from "date-fns";
 import { User, useAuth } from "~/contexts/auth.contexts";
+import { useQuery } from "@tanstack/react-query";
+import Loader from "~/components/Loader";
+import Error from "~/components/Error";
 
 export default function OrdersForm() {
   let userId: string | null = null;
@@ -13,11 +14,17 @@ export default function OrdersForm() {
   if (typeof localStorage !== "undefined") {
     userId = localStorage.getItem("userId");
   }
-  const { data: orders = [] } = useSWR<Order[]>("orders", () =>
-    getOrdersByUserId(user.id),
-  );
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["orders"],
+    queryFn: () => getOrdersByUserId(user.id),
+  });
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
 
+  if (isLoading) return <Loader />;
+  //@ts-ignore
+  if (error) return <Error error={error} />;
+  const orders = data!!;
   return (
     <>
       <div className="mb-4">Check all your orders here</div>

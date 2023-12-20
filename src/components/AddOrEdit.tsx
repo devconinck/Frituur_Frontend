@@ -3,12 +3,12 @@ import { FormProvider, useForm, useFormContext } from "react-hook-form";
 import { Category, Product } from "../types";
 import { Button } from "~/components/ui/button";
 import { saveProducts } from "~/api/products";
-import useSWR from "swr";
 import { getAllCategories } from "~/api/categories";
 import LabelInput from "./LabelInput";
-import { QueryClient, useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { UseFormReturn } from "react-hook-form";
 import Error from "./Error";
+import Loader from "./Loader";
 interface AddOrEditProps {
   currentProduct: {} | Product;
   setProductToUpdate: (id: number) => void;
@@ -105,7 +105,12 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
   currentProduct,
   setProductToUpdate,
 }) => {
-  const { data: categories = [] } = useSWR("categories", getAllCategories);
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["adminProducts"],
+    queryFn: getAllCategories,
+  });
 
   const methods = useForm();
 
@@ -116,9 +121,7 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
     formState: { errors, isSubmitting },
   } = methods;
 
-  const queryClient = new QueryClient();
-
-  const { status, error, mutate } = useMutation({
+  const saveProductMutation = useMutation({
     mutationFn: saveProducts,
     onSuccess: (newProduct) => {
       queryClient.setQueryData(["adminProducts"], newProduct);
@@ -132,7 +135,7 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
       const { name, description, price, url, categoryId } = data;
       const id = (currentProduct as Product)?.id;
 
-      mutate({
+      saveProductMutation.mutate({
         arg: {
           id,
           name,
@@ -143,7 +146,7 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
         },
       });
     },
-    [mutate, currentProduct],
+    [saveProductMutation, currentProduct],
   );
 
   useEffect(() => {
@@ -162,6 +165,10 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
     }
   }, [currentProduct, setValue, reset]);
 
+  if (isLoading) return <Loader />;
+  //@ts-ignore
+  if (error) return <Error error={data.error} />;
+  const categories = data!!;
   return (
     <>
       <h2 className="mb-2 mt-3 text-2xl font-semibold">Add products</h2>

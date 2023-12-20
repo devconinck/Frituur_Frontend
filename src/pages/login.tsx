@@ -34,8 +34,8 @@ export const Login: NextPage = () => {
   };
   const methods = useForm({
     defaultValues: {
-      email: "Quinten@gmail.com",
-      password: "StrongPassword1",
+      email: "quinten@email.com",
+      password: "StrongPassword",
     },
   });
   const router = useRouter();
@@ -73,6 +73,7 @@ export const Login: NextPage = () => {
               //@ts-ignore
               placeholder="your@email.com"
               validationRules={validationRules.email}
+              data-cy="email"
             />
 
             <LabelInput
@@ -80,16 +81,18 @@ export const Login: NextPage = () => {
               type="password"
               name="password"
               validationRules={validationRules.password}
+              data-cy="password"
             />
             <div className=" flex justify-end">
               <Button
+                data-cy="goRegister"
                 disabled={loading}
                 className="mx-4"
                 onClick={handleRegister}
               >
                 I don`t have an account
               </Button>
-              <Button type="submit" disabled={loading}>
+              <Button type="submit" disabled={loading} data-cy="login">
                 Sign in
               </Button>
             </div>

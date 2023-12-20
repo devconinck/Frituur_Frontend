@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
+import Error from "./Error";
 interface CategoriesListAdminProps {
   categories: Category[];
   onAdd: (name: string) => void;
@@ -24,9 +25,13 @@ interface CategoriesListAdminProps {
 const validationRules = {
   name: {
     required: "Category name is required",
+    pattern: {
+      value: /^[A-Za-z\s]+$/,
+      message: "Category name must only contain letters",
+    },
     min: {
-      value: 3,
-      message: "Category name must be at least 4 characters long",
+      length: 3,
+      message: "Category name must be at least 3 characters long",
     },
   },
 };
@@ -56,8 +61,8 @@ export const CategoriesListAdmin: React.FC<CategoriesListAdminProps> = ({
   return (
     <div className="mb-4 flex flex-col rounded px-8 pb-8 pt-6 shadow-md">
       <h2 className="mb-4 text-2xl font-bold">Categories</h2>
-      <ul className="mb-4">
-        {categories.map((category) => (
+      <ul className="mb-4" data-cy="categories">
+        {categories.map((category, index) => (
           <li
             key={category.id}
             className="mb-2 flex items-center justify-between"
@@ -65,7 +70,10 @@ export const CategoriesListAdmin: React.FC<CategoriesListAdminProps> = ({
             <span className="">{category.name}</span>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Trash2 className="cursor-pointer">Delete Product</Trash2>
+                <Trash2
+                  className="cursor-pointer"
+                  data-cy={`remove-${index}`}
+                />
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -77,7 +85,10 @@ export const CategoriesListAdmin: React.FC<CategoriesListAdminProps> = ({
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => handleDelete(category.id)}>
+                  <AlertDialogAction
+                    data-cy="delete"
+                    onClick={() => handleDelete(category.id)}
+                  >
                     Confirm
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -88,16 +99,20 @@ export const CategoriesListAdmin: React.FC<CategoriesListAdminProps> = ({
       </ul>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(handleAdd)} className="mb-4">
+          {/*//@ts-ignore*/}
+          <Error errors={errors} />
           <LabelInput
             label="Category name"
             name="name"
             type="name"
             validationRules={validationRules.name}
+            data-cy="category-name"
           />
           <Button
             type="submit"
             variant={"destructive"}
             className="rounded px-4 py-2 font-bold "
+            data-cy="add-category"
           >
             Add Category
           </Button>

@@ -5,6 +5,7 @@ import { Button } from "~/components/ui/button";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import LabelInput from "~/components/LabelInput";
+import Error from "~/components/Error";
 
 interface FormData {
   name: string;
@@ -84,6 +85,7 @@ const Register: NextPage = () => {
             onSubmit={handleSubmit(handleRegister)}
           >
             <h1 className="text-2xl font-bold">Create an account</h1>
+            <Error error={error} />
             <div>
               <LabelInput
                 label="Name"
@@ -92,6 +94,7 @@ const Register: NextPage = () => {
                 //@ts-ignore
                 placeholder="Joske Vermeulen"
                 validationRules={validationRules.name}
+                data-cy="name"
               />
 
               <LabelInput
@@ -101,6 +104,7 @@ const Register: NextPage = () => {
                 //@ts-ignore
                 placeholder="your@email.com"
                 validationRules={validationRules.email}
+                data-cy="email"
               />
 
               <LabelInput
@@ -108,12 +112,14 @@ const Register: NextPage = () => {
                 type="password"
                 name="password"
                 validationRules={validationRules.password}
+                data-cy="password"
               />
               <LabelInput
                 label="Confirm password"
                 type="password"
                 name="passwordConfirm"
                 validationRules={validationRules.password}
+                data-cy="passwordConfirm"
               />
             </div>
             <div className=" flex justify-end">
@@ -122,7 +128,7 @@ const Register: NextPage = () => {
                   I already have an account
                 </Button>
 
-                <Button type="submit" disabled={loading}>
+                <Button type="submit" disabled={loading} data-cy="register">
                   Register
                 </Button>
               </div>

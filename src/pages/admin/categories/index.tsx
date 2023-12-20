@@ -5,13 +5,12 @@ import {
   deleteCategory,
   getAllCategories,
 } from "~/api/categories";
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "~/components/Loader";
-import { ca } from "date-fns/locale";
-
-const queryClient = new QueryClient();
 
 export default function Orders() {
+  const queryClient = useQueryClient();
+
   const categoriesQuery = useQuery({
     queryKey: ["categories"],
     queryFn: async () => await getAllCategories(),
@@ -22,6 +21,7 @@ export default function Orders() {
     mutationFn: async (name: string) => await createCategory({ name }),
     onSuccess: () => {
       queryClient.invalidateQueries(["categories"]);
+      queryClient.refetchQueries(["categories"]);
     },
   });
 

@@ -11,6 +11,6 @@ export const createOrderItem = async (
     const response = await axios.post(baseUrl, OrderItemData);
     return response.data;
   } catch (error) {
-    throw new Error(error as ErrorProps);
+    throw error;
   }
 };
