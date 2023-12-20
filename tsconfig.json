@@ -31,5 +31,5 @@
     "src/server/api/test.js",
     "src/pages/account"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "cypress.config.ts", "cypress"]
 }

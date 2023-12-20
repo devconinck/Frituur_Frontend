@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "test": "cypress open"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.2",
@@ -39,7 +40,6 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.47.0",
     "superjson": "^1.13.1",
-    "swr": "^2.2.4",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"
