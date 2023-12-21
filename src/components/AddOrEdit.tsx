@@ -11,46 +11,41 @@ import Error from "./Error";
 import Loader from "./Loader";
 interface AddOrEditProps {
   currentProduct: {} | Product;
-  setProductToUpdate: (id: number) => void;
+  setProductToUpdate: (id: any) => void;
 }
 
 const validationRules = {
   name: {
-    required: "Product name is required",
-    min: {
-      value: 3,
-      message: "Product name must be at least 3 characters long",
+    validate: (value: string) => {
+      if (!value) return "Product name is required";
+      if (value.length < 3)
+        return "Product name must be at least 3 characters long";
     },
   },
   description: {
-    min: {
-      value: 3,
-      message: "Description must be at least 3 characters long",
+    validate: (value: string) => {
+      if (value && value.length < 3)
+        return "Description must be at least 3 characters long";
     },
   },
   price: {
-    valueAsNumber: true,
-    required: "Price is required",
-    min: {
-      value: 0.5,
-      message: "Price must be at least 0.5",
+    validate: (value: string) => {
+      const numberValue = Number(value);
+      if (!value) return "Price is required";
+      if (numberValue < 0.5) return "Price must be at least 0.5";
     },
   },
   url: {
-    min: {
-      value: 3,
-      message: "URL must be at least 3 characters long",
-    },
-    max: {
-      value: 50,
-      message: "URL must be at most 50 characters long",
+    validate: (value: string) => {
+      if (value && (value.length < 3 || value.length > 50))
+        return "URL must be between 3 and 50 characters long";
     },
   },
   categoryId: {
-    required: "Category ID is required",
-    min: {
-      value: 0,
-      message: "Category ID must be at least 0",
+    required: "Category is required",
+    validate: (value: string) => {
+      const numberValue = Number(value);
+      if (!value || numberValue == 0) return "Category ID is required";
     },
   },
 };
@@ -84,18 +79,25 @@ function CategoriesSelect({
         id={name}
         className="mt-1 w-full rounded-md border border-slate-600 p-2"
         disabled={isSubmitting}
+        data-cy="categorySelect"
       >
-        <option defaultChecked value="">
-          -- Select a categorie --
-        </option>
+        <option value="">-- Select a categorie --</option>
         {categories?.map((category: Category) => (
-          <option key={category.id} value={category.id}>
+          <option
+            key={category.id}
+            value={category.id}
+            data-cy={`category-${category.id}`}
+          >
             {category.name}
           </option>
         ))}
       </select>
       {hasError ? (
-        <div className="mt-1 text-sm text-red-600">{String(errors[name])}</div>
+        <div data-cy="error">
+          <p className="mt-1 text-xs text-red-500">
+            {errors[name]?.message?.toString()}
+          </p>
+        </div>
       ) : null}
     </div>
   );
@@ -108,7 +110,7 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
   const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["adminProducts"],
+    queryKey: ["adminCategories"],
     queryFn: getAllCategories,
   });
 
@@ -140,7 +142,7 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
           id,
           name,
           description,
-          price,
+          price: Number(price),
           url,
           categoryId: Number(categoryId),
         },
@@ -182,6 +184,7 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
               name="name"
               type="name"
               validationRules={validationRules.name}
+              data-cy="name"
             />
           </div>
 
@@ -198,8 +201,9 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
             <LabelInput
               label="Price"
               name="price"
-              type="number"
+              type="text"
               validationRules={validationRules.price}
+              data-cy="price"
             />
           </div>
 
@@ -209,6 +213,7 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
               name="url"
               type="text"
               validationRules={validationRules.url}
+              data-cy="url"
             />
           </div>
 
@@ -222,12 +227,17 @@ const AddOrEdit: React.FC<AddOrEditProps> = ({
                 type="submit"
                 disabled={isSubmitting}
                 variant={"destructive"}
+                data-cy="addProduct"
               >
                 {(currentProduct as Product)?.id
                   ? "Save product"
                   : "Add product"}
               </Button>
-              <Button type="reset" variant={"secondary"}>
+              <Button
+                type="reset"
+                onClick={() => setProductToUpdate(null)}
+                variant={"secondary"}
+              >
                 Reset
               </Button>
             </div>

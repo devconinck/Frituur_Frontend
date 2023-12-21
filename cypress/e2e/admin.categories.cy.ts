@@ -22,7 +22,7 @@ describe("Admin Categories", () => {
     cy.get("[data-cy=error]").should("contain", "name is required");
   });
 
-  it("not allowed character", () => {
+  it("characters that arent allowed", () => {
     cy.visit("/admin/categories");
     cy.get("[data-cy=category-name]").type("1".repeat(3));
     cy.get("[data-cy=add-category]").click();

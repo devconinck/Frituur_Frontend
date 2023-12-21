@@ -22,7 +22,7 @@ const AdminPage: React.FC = () => {
 
   const products = data;
 
-  const setProductToUpdate = (id: number): void => {
+  const setProductToUpdate = (id: any): void => {
     setCurrentProduct(
       id === null
         ? {}

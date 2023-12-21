@@ -40,7 +40,7 @@ const AdminProduct: React.FC<AdminProductProps> = ({ product, onEdit }) => {
   }, [product.id, onEdit]);
 
   return (
-    <div key={product.id} className="">
+    <div key={product.id} data-cy="adminProduct" className="">
       <div className=" items-center justify-center rounded-lg border p-4">
         <div className="mb-2 flex justify-between">
           <Image
@@ -61,7 +61,12 @@ const AdminProduct: React.FC<AdminProductProps> = ({ product, onEdit }) => {
             </Edit3>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Trash2 className="cursor-pointer">Delete Product</Trash2>
+                <Trash2
+                  className="cursor-pointer"
+                  data-cy={`delete-${product.id}`}
+                >
+                  Delete Product
+                </Trash2>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -73,7 +78,7 @@ const AdminProduct: React.FC<AdminProductProps> = ({ product, onEdit }) => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete}>
+                  <AlertDialogAction onClick={handleDelete} data-cy="confirm">
                     Confirm
                   </AlertDialogAction>
                 </AlertDialogFooter>
