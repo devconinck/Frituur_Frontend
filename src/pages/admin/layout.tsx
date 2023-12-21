@@ -1,6 +1,5 @@
 import { Separator } from "src/components/ui/separator";
 import { SidebarNav } from "src/components/ui/sidebar-nav";
-import AdminRoute from "src/components/AdminRoute";
 
 const sidebarNavItems = [
   {
@@ -23,13 +22,11 @@ interface AdminLayoutProps {
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
   return (
-    //<AdminRoute>
     <>
-      {" "}
       <div className=" space-y-6 p-10 pb-16 md:block">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">
-            Frituur d'Aa Admin Dashboard
+            Frituur d`Aa Admin Dashboard
           </h2>
           <p className="text-muted-foreground">
             Manage your products, categories and orders
@@ -44,6 +41,5 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </div>
     </>
-    // </AdminRoute>
   );
 }

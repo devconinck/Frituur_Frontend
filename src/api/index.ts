@@ -1,6 +1,4 @@
 import axiosRoot from "axios";
-import { ca } from "date-fns/locale";
-import Error, { ErrorProps } from "next/error";
 
 const baseUrl = `http://localhost:8080`;
 

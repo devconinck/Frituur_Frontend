@@ -9,9 +9,11 @@ import {
 } from "react";
 import * as api from "../api/index";
 import { useMutation } from "@tanstack/react-query";
+import { set } from "date-fns";
 
 const JWT_TOKEN_KEY = "jwtToken";
 const USER_ID_KEY = "userId";
+const ADMIN_KEY = "admin";
 //@ts-ignore
 const AuthContext = createContext();
 
@@ -21,6 +23,24 @@ export type User = {
   email: string;
   role: string;
 };
+
+export interface AuthContextValue {
+  token: string | null;
+  user: User | null;
+  isAdmin: boolean;
+  error: Error | null;
+  ready: boolean;
+  loading: boolean;
+  isAuthed: boolean;
+  login: (email: string, password: string) => void;
+  logout: () => void;
+  register: (
+    name: string,
+    email: string,
+    password: string,
+    passwordConfirm: string,
+  ) => Promise<boolean>;
+}
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -38,7 +58,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     api.setAuthToken(token!!);
     setIsAuthed(Boolean(token));
     setReady(true);
-  }, [token]);
+  }, [token, user]);
 
   const setSession = useCallback(
     (
@@ -50,9 +70,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       localStorage.setItem(JWT_TOKEN_KEY, token);
       localStorage.setItem(USER_ID_KEY, user.id.toString());
+      localStorage.setItem(ADMIN_KEY, user.role === "ADMIN" ? "true" : "false");
     },
     [],
   );
+
+  const isAdmin =
+    typeof window !== "undefined"
+      ? localStorage.getItem(ADMIN_KEY) == "true"
+      : false;
 
   const loginMutation = useMutation(
     (loginData: { email: string; password: string }) =>
@@ -119,11 +145,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.removeItem(USER_ID_KEY);
   }, []);
 
-  const value = useMemo(
+  const value = useMemo<AuthContextValue>(
     () => ({
       token,
       user,
-      error: loginMutation.error || RegisterMutation.error,
+      isAdmin,
+      error:
+        (loginMutation.error as Error | null) ||
+        (RegisterMutation.error as Error | null),
       ready,
       loading: loginMutation.isLoading || RegisterMutation.isLoading,
       isAuthed,
@@ -134,6 +163,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     [
       token,
       user,
+      isAdmin,
       loginMutation.error,
       RegisterMutation.error,
       ready,

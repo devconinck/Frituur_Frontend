@@ -1,13 +1,12 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
-import { useAuth } from "~/contexts/auth.contexts";
+import { AuthContextValue, useAuth } from "~/contexts/auth.contexts";
 
-const AdminRoute = ({ children }) => {
-  const router = useRouter();
-  const { ready, isAdmin } = useAuth();
+import React, { ReactNode } from "react";
+import { Button } from "./ui/button";
 
-  const loginPath = `/login?redirect=${router.asPath}`;
+const AdminRoute = ({ children }: { children: ReactNode }) => {
+  const { ready, isAdmin } = useAuth() as AuthContextValue;
 
   if (!ready) {
     return (
@@ -27,15 +26,18 @@ const AdminRoute = ({ children }) => {
 
   if (!isAdmin) {
     return (
-      <div>
+      <div className="flex flex-col items-center">
         <div className="text-2xl text-red-500">
           You do not have access to this application!
         </div>
         <div className="text-xl text-red-500">
-          Please return to the homepage{" "}
-          <Link className="text-slate-500" href={"localhost:3000/"}>
-            here
-          </Link>
+          Please
+          <Button className="mx-5 my-4" variant={"ghost"}>
+            <Link className="text-slate-500" href={"/"}>
+              Click Here
+            </Link>
+          </Button>
+          to return to the homepage
         </div>
       </div>
     );

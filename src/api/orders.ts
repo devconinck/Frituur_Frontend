@@ -1,7 +1,5 @@
 import { axios } from "./index";
-import { request } from "https";
-import Error, { ErrorProps } from "next/error";
-import { CartItem, Order } from "~/types";
+import { Order } from "~/types";
 
 const baseUrl = `/orders`;
 

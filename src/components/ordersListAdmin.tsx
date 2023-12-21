@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { getAllOrders } from "~/api/orders";
 import { Order } from "~/types";
 
@@ -16,7 +17,6 @@ export default function OrdersListAdmin() {
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
 
   if (isLoading) return <Loader />;
-  //@ts-ignore
   if (error) return <Error error={error} />;
 
   const orders = data!!;

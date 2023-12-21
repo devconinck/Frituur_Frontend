@@ -7,6 +7,7 @@ import Loader from "~/components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import Error from "~/components/Error";
 import { Product } from "~/types";
+import AdminRoute from "~/components/AdminRoute";
 
 const AdminPage: React.FC = () => {
   const { data, isLoading, error } = useQuery({
@@ -31,15 +32,17 @@ const AdminPage: React.FC = () => {
   };
 
   return (
-    <div className="p-4">
-      <AddOrEdit
-        setProductToUpdate={setProductToUpdate}
-        currentProduct={currentProduct}
-      />
-      <Separator className="mb-5" />
+    <AdminRoute>
+      <div className="p-4">
+        <AddOrEdit
+          setProductToUpdate={setProductToUpdate}
+          currentProduct={currentProduct}
+        />
+        <Separator className="mb-5" />
 
-      <ProductListAdmin products={products} onEdit={setProductToUpdate} />
-    </div>
+        <ProductListAdmin products={products} onEdit={setProductToUpdate} />
+      </div>
+    </AdminRoute>
   );
 };
 

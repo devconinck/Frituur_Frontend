@@ -25,9 +25,9 @@ export const createCategory = async ({
   }
 };
 
-export const deleteCategory = async (CategoryId: number): Promise<Category> => {
+export const deleteCategory = async (categoryId: number): Promise<Category> => {
   try {
-    const response = await axios.delete(`${baseUrl}/${CategoryId}`);
+    const response = await axios.delete(`${baseUrl}/${categoryId}`);
     return response.data;
   } catch (error) {
     throw error;

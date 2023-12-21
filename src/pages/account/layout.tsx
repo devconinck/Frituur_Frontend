@@ -2,6 +2,7 @@ import { Metadata } from "next";
 
 import { Separator } from "src/components/ui/separator";
 import { SidebarNav } from "src/components/ui/sidebar-nav";
+import PrivateRoute from "~/components/PrivateRoute";
 
 const sidebarNavItems = [
   {
@@ -24,7 +25,7 @@ interface SettingsLayoutProps {
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
-    <>
+    <PrivateRoute>
       <div className=" space-y-6 p-10 pb-16 md:block">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
@@ -40,6 +41,6 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
           <div className="flex-1 lg:max-w-2xl">{children}</div>
         </div>
       </div>
-    </>
+    </PrivateRoute>
   );
 }

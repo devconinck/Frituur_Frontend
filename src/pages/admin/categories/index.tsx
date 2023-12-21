@@ -7,6 +7,7 @@ import {
 } from "~/api/categories";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "~/components/Loader";
+import AdminRoute from "~/components/AdminRoute";
 
 export default function Orders() {
   const queryClient = useQueryClient();
@@ -47,12 +48,14 @@ export default function Orders() {
   };
 
   return (
-    <div className="space-y-6">
-      <CategoriesListAdmin
-        categories={categories || []}
-        onAdd={(name: string) => handleAdd(name)}
-        onDelete={(id: number) => handleDelete(id)}
-      />
-    </div>
+    <AdminRoute>
+      <div className="space-y-6">
+        <CategoriesListAdmin
+          categories={categories || []}
+          onAdd={(name: string) => handleAdd(name)}
+          onDelete={(id: number) => handleDelete(id)}
+        />
+      </div>
+    </AdminRoute>
   );
 }

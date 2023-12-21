@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
-import { useAuth } from "~/contexts/auth.contexts";
+import { AuthContextValue, useAuth } from "~/contexts/auth.contexts";
 import Error from "~/components/Error";
 import * as api from "~/api/index";
 import {
@@ -12,14 +12,14 @@ import {
   AlertDialogHeader,
 } from "~/components/ui/alert-dialog";
 
-const PrivateRoute = ({ children }) => {
+const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const { ready, isAuthed, token } = useAuth();
+  const { ready, isAuthed, token } = useAuth() as AuthContextValue;
 
   const loginPath = `/login?redirect=${router.asPath}`;
   const registerPath = `/register?redirect=${router.asPath}`;
 
-  api.setAuthToken(token);
+  api.setAuthToken(token!!);
 
   const handleLogin = () => {
     router.replace(loginPath);
@@ -28,22 +28,6 @@ const PrivateRoute = ({ children }) => {
   const handleRegister = () => {
     router.replace(registerPath);
   };
-
-  if (!ready || !token) {
-    return (
-      <div>
-        <div>
-          <div>
-            <h1>Loading</h1>
-            <p>
-              Please wait while we are checking your credentials and loading the
-              application
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (!isAuthed) {
     return (

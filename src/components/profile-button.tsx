@@ -11,15 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "src/components/ui/dropdown-menu";
-import { useAuth } from "~/contexts/auth.contexts";
+import { AuthContextValue, useAuth } from "~/contexts/auth.contexts";
 import { useCallback } from "react";
 import { useRouter } from "next/router";
 
 export function ProfileButton() {
-  const { error, loading, logout } = useAuth();
+  const { user, logout } = useAuth() as AuthContextValue;
   const router = useRouter();
-
-  const localStorage = typeof window !== "undefined" && window.localStorage;
 
   const handleLogout = useCallback(async () => {
     logout();
@@ -33,18 +31,16 @@ export function ProfileButton() {
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src="04.png" />
-            <AvatarFallback>QD</AvatarFallback>
+            <AvatarFallback>{user?.name[0]}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">
-              Quinten Deconinck
-            </p>
+            <p className="text-lg font-medium leading-none">{user?.name}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              quinten0211@gmail.com
+              {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>

@@ -29,10 +29,8 @@ export type Order = {
 export type Customer = {
   id: number;
   firstName: string;
-  lastName: string;
-  birthDate: Date;
+  lastName?: string;
   email: string;
-  phone: string;
   orders: Order[];
 };
 
