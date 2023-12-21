@@ -53,7 +53,7 @@ export default function OrdersListAdmin() {
                 }
                 className="rounded  px-3 py-1 "
               >
-                See Details
+                {expandedOrderId === order.id ? "Hide details" : "Show details"}
               </Button>
               {expandedOrderId === order.id && (
                 <div className="mt-3">

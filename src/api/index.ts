@@ -1,6 +1,6 @@
 import axiosRoot from "axios";
 
-const baseUrl = process.env.URL || "http://localhost:8080";
+const baseUrl = process.env.NEXT_PUBLIC_URL || "http://localhost:3000";
 
 export const axios = axiosRoot.create({
   baseURL: baseUrl,

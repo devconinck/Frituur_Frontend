@@ -1,7 +1,4 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/TA_3CB_a)
-# Examenopdracht Front-end Web Development / Web Services
-
-> Schrap hierboven wat niet past
+# Examenopdracht Front-end Web Development
 
 - Student: Quinten Deconinck
 - Studentennummer: 202293145
@@ -13,15 +10,40 @@ Ik verwacht dat volgende software reeds geïnstalleerd is:
 
 - [NodeJS](https://nodejs.org)
 - [Yarn](https://yarnpkg.com)
-- [MySQL Community Server](https://dev.mysql.com/downloads/mysql/)
-- ...
-
-> Vul eventueel aan
 
 ## Opstarten
 
-> Schrijf hier hoe we de applicatie starten (.env bestanden aanmaken, commando's om uit te voeren...)
+### Install all dependencies using the following command:
+
+```bash
+yarn install
+```
+
+### Run the following command to start the application:
+
+```bash
+yarn dev
+```
 
 ## Testen
 
-> Schrijf hier hoe we de testen uitvoeren (.env bestanden aanmaken, commando's om uit te voeren...)
+### To test the application, make sure your run the following command in the backend:
+
+```bash
+prisma db seed
+```
+
+### Make sure both the frontend AND backend are running locally in your terminal by using the following commands:
+
+```bash
+FRONTEND: yarn dev
+BACKEND: yarn start
+```
+
+### Then run the following command in a different terminal:
+
+```bash
+yarn test
+```
+
+You can now select E2E tests in the cypress window and select the tests you want to run.

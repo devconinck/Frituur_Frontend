@@ -34,7 +34,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               <Component {...pageProps} />
             </Layout>
           )}
-          <ReactQueryDevtools />
         </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>

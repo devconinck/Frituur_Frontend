@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { NextPage } from "next";
 import { useCallback } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -32,12 +33,7 @@ export const Login: NextPage = () => {
     loading: boolean;
     login: (email: string, password: string) => Promise<boolean>;
   };
-  const methods = useForm({
-    defaultValues: {
-      email: "quinten@email.com",
-      password: "StrongPassword",
-    },
-  });
+  const methods = useForm();
   const router = useRouter();
   const { handleSubmit } = methods;
 
@@ -70,7 +66,6 @@ export const Login: NextPage = () => {
               label="email"
               type="text"
               name="email"
-              //@ts-ignore
               placeholder="your@email.com"
               validationRules={validationRules.email}
               data-cy="email"
