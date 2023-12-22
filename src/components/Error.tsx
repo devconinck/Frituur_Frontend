@@ -36,7 +36,12 @@ export default function Error({ error }: ErrorProps) {
   const handleRegister = () => {
     router.replace(registerPath);
   };
-  if (isAxiosError(error) && error.response?.data.statusCode === 401) {
+  if (
+    isAxiosError(error) &&
+    error.response?.data.statusCode === 401 &&
+    (!router.pathname.includes("/login") ||
+      !router.pathname.includes("/register"))
+  ) {
     return (
       <AlertDialog defaultOpen>
         <AlertDialogContent>
