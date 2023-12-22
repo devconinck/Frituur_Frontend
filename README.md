@@ -25,31 +25,33 @@ yarn install
 yarn dev
 ```
 
-## Testen
-
-### To test the application, make sure your run the following command in the backend:
-
-```bash
-prisma db seed
-```
-
-### If you get an error here, make sure you have the correct .env file in the backend folder and run the following command in your Windows terminal:
-
-```bash
-npm install prisma -g
-```
+## To test the application, follow these steps:
 
 ### Make sure both the frontend AND backend are running locally in your terminal by using the following commands:
 
 ```bash
 FRONTEND: yarn dev
-BACKEND: yarn start
+BACKEND: yarn start:dev
 ```
 
-### Then run the following command in a different terminal:
+#### Make sure the backend is correctly setup according to the README.md file in the backend folder.
+
+### Then open a different terminal and run the following command:
 
 ```bash
 yarn test
 ```
 
 You can now select E2E tests in the cypress window and select the tests you want to run.
+
+### If you made any changes to the database, make sure you run the following command in the backend:
+
+```bash
+prisma db seed
+```
+
+### If you get an error here, make sure you have the correct .env file in the backend folder and if necessary run the following command in your Windows terminal:
+
+```bash
+npm install prisma -g
+```
