@@ -18,13 +18,13 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <AuthProvider>
           {isAdmin ? (
             <AdminLayout>
               <Component {...pageProps} />
@@ -34,8 +34,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
               <Component {...pageProps} />
             </Layout>
           )}
-        </ThemeProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };
