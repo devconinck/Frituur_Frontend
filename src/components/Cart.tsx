@@ -60,7 +60,7 @@ const Cart: React.FC<CartProps> = ({ cart, removeFromCart }) => {
                 </div>
                 <Trash2
                   onClick={() => removeFromCart(item.product.id)}
-                  className="text-red-500"
+                  className="cursor-pointer text-red-500"
                   data-cy={`remove-${index}`}
                 />
                 <p className="text-right">
