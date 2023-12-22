@@ -30,11 +30,11 @@ export default function Error({ error }: ErrorProps) {
   api.setAuthToken(token!!);
 
   const handleLogin = () => {
-    router.push(loginPath);
+    router.replace(loginPath);
   };
 
   const handleRegister = () => {
-    router.push(registerPath);
+    router.replace(registerPath);
   };
   if (isAxiosError(error) && error.response?.data.statusCode === 401) {
     return (
