@@ -24,7 +24,7 @@ export default function Error({ error }: ErrorProps) {
     ? process.env.NEXT_PUBLIC_SITE
     : "http://localhost:3000";
 
-  const loginPath = `$/login?redirect=${router.asPath}`;
+  const loginPath = `/login?redirect=${router.asPath}`;
   const registerPath = `/register?redirect=${router.asPath}`;
 
   api.setAuthToken(token!!);
