@@ -48,9 +48,7 @@ export const Login: NextPage = () => {
       const { redirect } = router.query;
 
       if (loggedIn) {
-        router.push(
-          `${process.env.NEXT_PUBLIC_URL}${redirect ? String(redirect) : "/"}`,
-        );
+        router.push(`${NEXT_PUBLIC_SITE}${redirect ? String(redirect) : "/"}`);
       }
     },
     [login, router],
