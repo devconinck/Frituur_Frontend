@@ -39,8 +39,7 @@ export default function Error({ error }: ErrorProps) {
   if (
     isAxiosError(error) &&
     error.response?.data.statusCode === 401 &&
-    (!router.pathname.includes("/login") ||
-      !router.pathname.includes("/register"))
+    !router.pathname.includes("/login")
   ) {
     return (
       <AlertDialog defaultOpen>
