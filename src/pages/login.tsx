@@ -49,7 +49,7 @@ export const Login: NextPage = () => {
 
       if (loggedIn) {
         router.push(
-          `http://localhost:3000${redirect ? String(redirect) : "/"}`,
+          `${process.env.NEXT_PUBLIC_URL}${redirect ? String(redirect) : "/"}`,
         );
       }
     },
