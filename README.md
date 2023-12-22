@@ -33,6 +33,12 @@ yarn dev
 prisma db seed
 ```
 
+### If you get an error here, make sure you have the correct .env file in the backend folder and run the following command in your Windows terminal:
+
+```bash
+npm install prisma -g
+```
+
 ### Make sure both the frontend AND backend are running locally in your terminal by using the following commands:
 
 ```bash
