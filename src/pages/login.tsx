@@ -47,12 +47,8 @@ export const Login: NextPage = () => {
 
       const { redirect } = router.query;
 
-      const url = process.env.NEXT_PUBLIC_SITE
-        ? process.env.NEXT_PUBLIC_SITE
-        : "http://localhost:3000";
-
       if (loggedIn) {
-        router.push(`${url}${redirect ? String(redirect) : "/"}`);
+        router.push(`${redirect ? String(redirect) : "/"}`);
       }
     },
     [login, router],

@@ -22,11 +22,11 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   api.setAuthToken(token!!);
 
   const handleLogin = () => {
-    router.replace(loginPath);
+    router.push(loginPath);
   };
 
   const handleRegister = () => {
-    router.replace(registerPath);
+    router.push(registerPath);
   };
 
   if (!isAuthed) {
