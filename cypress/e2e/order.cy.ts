@@ -20,7 +20,7 @@ describe("The Order Page", () => {
     cy.get("[data-cy=products]").find("li").should("have.length", 4);
 
     cy.get("[data-cy=category-Drinks]").click();
-    cy.get("[data-cy=products]").find("li").should("have.length", 9);
+    cy.get("[data-cy=products]").find("li").should("have.length", 8);
   });
 
   it("adds products to cart", () => {
