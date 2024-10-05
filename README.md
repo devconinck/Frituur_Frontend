@@ -1,8 +1,6 @@
 # Examenopdracht Front-end Web Development
 
 - Student: Quinten Deconinck
-- Studentennummer: 202293145
-- E-mailadres: <mailto:quinten.deconinck@student.hogent.be>
 
 ## Vereisten
 
